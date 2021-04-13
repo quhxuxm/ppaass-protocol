@@ -35,7 +35,7 @@ public class TcpPacketReader {
         byteBuffer.get(optionAndPadding);
         ByteBuffer optionAndPaddingBuffer = ByteBuffer.wrap(optionAndPadding);
         while (optionAndPaddingBuffer.hasRemaining()) {
-            int optionKind = optionAndPaddingBuffer.get();
+            int optionKind = optionAndPaddingBuffer.get()& 0xFF;
             TcpHeaderOption.Kind tcpHeaderOptionKind = TcpHeaderOption.Kind.fromValue(optionKind);
             if (tcpHeaderOptionKind == TcpHeaderOption.Kind.EOL) {
                 break;
@@ -45,13 +45,14 @@ public class TcpPacketReader {
                 continue;
             }
             if (tcpHeaderOptionKind == null) {
-                throw new IllegalStateException("Not exist option.");
+                throw new IllegalArgumentException(
+                        "The option kind is not exist, option kind value=" + optionKind);
             }
             int infoLengthInDefinition = tcpHeaderOptionKind.getInfoLength();
             int totalOptionLengthInByte = optionAndPaddingBuffer.get() & 0xFF;
             if (infoLengthInDefinition != -1) {
                 if (totalOptionLengthInByte != (infoLengthInDefinition + 2)) {
-                    throw new IllegalStateException("The length of the option is not match.");
+                    continue;
                 }
             }
             byte[] infoBytes = new byte[totalOptionLengthInByte - 2];
@@ -64,7 +65,9 @@ public class TcpPacketReader {
         tcpPacketBuilder.data(data);
         TcpPacket result = tcpPacketBuilder.build();
         if (result.getHeader().getOffset() != offset) {
-            throw new IllegalArgumentException("The offset in the input data do not match.");
+            throw new IllegalArgumentException(
+                    "The offset in the input data do not match, result.offest=" + result.getHeader().getOffset() +
+                            ", offset=" + offset);
         }
         byteBuffer.clear();
         return result;
