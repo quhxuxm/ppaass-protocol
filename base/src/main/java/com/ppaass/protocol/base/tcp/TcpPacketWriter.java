@@ -1,9 +1,9 @@
 package com.ppaass.protocol.base.tcp;
 
 import com.ppaass.protocol.base.ChecksumUtil;
-import com.ppaass.protocol.base.ip.IpV6Header;
 import com.ppaass.protocol.base.ip.IpDataProtocol;
 import com.ppaass.protocol.base.ip.IpV4Header;
+import com.ppaass.protocol.base.ip.IpV6Header;
 
 import java.nio.ByteBuffer;
 
