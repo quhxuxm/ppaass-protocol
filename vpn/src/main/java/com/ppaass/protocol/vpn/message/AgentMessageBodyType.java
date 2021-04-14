@@ -2,21 +2,17 @@ package com.ppaass.protocol.vpn.message;
 
 public enum AgentMessageBodyType implements MessageBodyType {
     /**
-     * Create a connection on proxy and keep alive
+     * Create a connection
      */
-    CONNECT_WITH_KEEP_ALIVE(0),
-    /**
-     * Create a connection on proxy and do not keep alive
-     */
-    CONNECT_WITHOUT_KEEP_ALIVE(1),
+    TCP_CONNECT(0),
     /**
      * Sending a TCP data
      */
-    TCP_DATA(2),
+    TCP_DATA(1),
     /**
      * Sending a UDP data
      */
-    UDP_DATA(3);
+    UDP_DATA(2);
     private final int value;
 
     AgentMessageBodyType(int value) {
