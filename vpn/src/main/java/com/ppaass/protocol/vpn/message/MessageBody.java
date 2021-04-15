@@ -1,5 +1,7 @@
 package com.ppaass.protocol.vpn.message;
 
+import java.util.Arrays;
+
 public abstract class MessageBody<T extends MessageBodyType> {
     private final String id;
     private final String userToken;
@@ -52,5 +54,19 @@ public abstract class MessageBody<T extends MessageBodyType> {
 
     public byte[] getData() {
         return data;
+    }
+
+    @Override
+    public String toString() {
+        return "MessageBody{" +
+                "id='" + id + '\'' +
+                ", userToken='" + userToken + '\'' +
+                ", sourceHost='" + sourceHost + '\'' +
+                ", sourcePort=" + sourcePort +
+                ", targetHost='" + targetHost + '\'' +
+                ", targetPort=" + targetPort +
+                ", bodyType=" + bodyType +
+                ", data=" + Arrays.toString(data) +
+                '}';
     }
 }

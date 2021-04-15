@@ -1,5 +1,7 @@
 package com.ppaass.protocol.vpn.message;
 
+import java.util.Arrays;
+
 public class AgentMessageBody extends MessageBody<AgentMessageBodyType> {
     private final String agentInstanceId;
 
@@ -12,5 +14,20 @@ public class AgentMessageBody extends MessageBody<AgentMessageBodyType> {
 
     public String getAgentInstanceId() {
         return agentInstanceId;
+    }
+
+    @Override
+    public String toString() {
+        return "AgentMessageBody{" +
+                ", id='" + getId() + '\'' +
+                "agentInstanceId='" + agentInstanceId + '\'' +
+                ", userToken='" + getUserToken() + '\'' +
+                ", targetHost='" + getTargetHost() + '\'' +
+                ", targetPort=" + getTargetPort() +
+                ", sourcePort=" + getSourcePort() +
+                ", sourceHost='" + getSourceHost() + '\'' +
+                ", bodyType=" + getBodyType() +
+                ", data=" + Arrays.toString(getData()) +
+                "} " + super.toString();
     }
 }

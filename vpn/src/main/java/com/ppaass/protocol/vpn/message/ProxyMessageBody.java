@@ -1,5 +1,7 @@
 package com.ppaass.protocol.vpn.message;
 
+import java.util.Arrays;
+
 public class ProxyMessageBody extends MessageBody<ProxyMessageBodyType> {
     private final String proxyInstanceId;
 
@@ -12,5 +14,20 @@ public class ProxyMessageBody extends MessageBody<ProxyMessageBodyType> {
 
     public String getProxyInstanceId() {
         return proxyInstanceId;
+    }
+
+    @Override
+    public String toString() {
+        return "ProxyMessageBody{" +
+                "id='" + getId() + '\'' +
+                ", proxyInstanceId='" + proxyInstanceId + '\'' +
+                ", userToken='" + getUserToken() + '\'' +
+                ", targetHost='" + getTargetHost() + '\'' +
+                ", targetPort=" + getTargetPort() +
+                ", sourcePort=" + getSourcePort() +
+                ", sourceHost='" + getSourceHost() + '\'' +
+                ", bodyType=" + getBodyType() +
+                ", data=" + Arrays.toString(getData()) +
+                "} " + super.toString();
     }
 }
