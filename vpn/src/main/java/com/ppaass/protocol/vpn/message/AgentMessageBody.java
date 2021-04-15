@@ -29,8 +29,8 @@ public class AgentMessageBody extends MessageBody<AgentMessageBodyType> {
                 ", sourceHost='" + getSourceHost() + '\'' +
                 ", bodyType=" + getBodyType() +
                 ", data=" + Arrays.toString(getData()) +
-                ", targetChannelId='" + getTargetChannelId() + '\'' +
-                ", agentChannelId='" + getAgentChannelId() + '\'' +
+                ", targetTcpChannelId='" + getTargetTcpChannelId() + '\'' +
+                ", agentTcpChannelId='" + getAgentTcpChannelId() + '\'' +
                 '}';
     }
 }
