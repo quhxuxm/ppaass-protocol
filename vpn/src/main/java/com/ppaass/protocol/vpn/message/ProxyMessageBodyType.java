@@ -4,31 +4,31 @@ public enum ProxyMessageBodyType implements MessageBodyType {
     /**
      * TCP data handled.
      */
-    OK_TCP(0),
+    TCP_DATA_SUCCESS(0),
     /**
      * TCP connection close.
      */
-    CONNECTION_CLOSE(2),
+    TCP_CONNECTION_CLOSE(1),
     /**
      * UDP data handled.
      */
-    OK_UDP(1),
+    UDP_DATA_SUCCESS(2),
     /**
      * Connection fail
      */
-    CONNECT_FAIL(3),
+    TCP_CONNECT_FAIL(3),
     /**
      * Connection success
      */
-    CONNECT_SUCCESS(4),
+    TCP_CONNECT_SUCCESS(4),
     /**
      * Fail on transfer TCP data
      */
-    FAIL_TCP(5),
+    TCP_DATA_FAIL(5),
     /**
      * Fail on transfer UDP data
      */
-    FAIL_UDP(6);
+    UDP_DATA_FAIL(6);
     private final int value;
 
     ProxyMessageBodyType(int value) {
