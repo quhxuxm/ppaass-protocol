@@ -100,6 +100,9 @@ public class MessageCodec {
         tempBuffer.writeInt(targetAddressByteArray.length);
         tempBuffer.writeBytes(targetAddressByteArray);
         tempBuffer.writeInt(agentMessageBody.getTargetPort());
+        byte[] agentChannelIdByteArray = agentMessageBody.getAgentChannelId().getBytes(StandardCharsets.UTF_8);
+        tempBuffer.writeInt(agentChannelIdByteArray.length);
+        tempBuffer.writeBytes(agentChannelIdByteArray);
         byte[] targetOriginalData = agentMessageBody.getData();
         tempBuffer.writeInt(targetOriginalData.length);
         tempBuffer.writeBytes(targetOriginalData);
@@ -132,6 +135,9 @@ public class MessageCodec {
         tempBuffer.writeInt(targetAddressByteArray.length);
         tempBuffer.writeBytes(targetAddressByteArray);
         tempBuffer.writeInt(proxyMessageBody.getTargetPort());
+        byte[] targetChannelIdByteArray = proxyMessageBody.getTargetChannelId().getBytes(StandardCharsets.UTF_8);
+        tempBuffer.writeInt(targetChannelIdByteArray.length);
+        tempBuffer.writeBytes(targetChannelIdByteArray);
         byte[] targetOriginalData = proxyMessageBody.getData();
         tempBuffer.writeInt(targetOriginalData.length);
         tempBuffer.writeBytes(targetOriginalData);
@@ -169,11 +175,14 @@ public class MessageCodec {
         String targetAddress = messageBodyByteBuf.readCharSequence(targetAddressLength,
                 StandardCharsets.UTF_8).toString();
         int targetPort = messageBodyByteBuf.readInt();
+        int agentChannelIdLength = messageBodyByteBuf.readInt();
+        String agentChannelId = messageBodyByteBuf.readCharSequence(agentChannelIdLength,
+                StandardCharsets.UTF_8).toString();
         int originalDataLength = messageBodyByteBuf.readInt();
         byte[] originalData = new byte[originalDataLength];
         messageBodyByteBuf.readBytes(originalData);
         return new AgentMessageBody(messageId, agentInstanceId, userToken, sourceAddress, sourcePort, targetAddress,
-                targetPort, bodyType,
+                targetPort, bodyType, agentChannelId,
                 originalData);
     }
 
@@ -205,11 +214,14 @@ public class MessageCodec {
         String targetAddress = messageBodyByteBuf.readCharSequence(targetAddressLength,
                 StandardCharsets.UTF_8).toString();
         int targetPort = messageBodyByteBuf.readInt();
+        int targetChannelIdLength = messageBodyByteBuf.readInt();
+        String targetChannelId = messageBodyByteBuf.readCharSequence(targetChannelIdLength,
+                StandardCharsets.UTF_8).toString();
         int originalDataLength = messageBodyByteBuf.readInt();
         byte[] originalData = new byte[originalDataLength];
         messageBodyByteBuf.readBytes(originalData);
         return new ProxyMessageBody(messageId, proxyInstanceId, userToken, sourceAddress, sourcePort, targetAddress,
-                targetPort, bodyType,
+                targetPort, bodyType, targetChannelId,
                 originalData);
     }
 

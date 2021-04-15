@@ -4,16 +4,22 @@ import java.util.Arrays;
 
 public class AgentMessageBody extends MessageBody<AgentMessageBodyType> {
     private final String agentInstanceId;
+    private final String agentChannelId;
 
     public AgentMessageBody(String id, String agentInstanceId, String userToken, String sourceHost, int sourcePort,
                             String targetHost, int targetPort,
-                            AgentMessageBodyType bodyType, byte[] data) {
+                            AgentMessageBodyType bodyType, String agentChannelId, byte[] data) {
         super(id, userToken, sourceHost, sourcePort, targetHost, targetPort, bodyType, data);
         this.agentInstanceId = agentInstanceId;
+        this.agentChannelId = agentChannelId;
     }
 
     public String getAgentInstanceId() {
         return agentInstanceId;
+    }
+
+    public String getAgentChannelId() {
+        return agentChannelId;
     }
 
     @Override
@@ -27,6 +33,7 @@ public class AgentMessageBody extends MessageBody<AgentMessageBodyType> {
                 ", sourcePort=" + getSourcePort() +
                 ", sourceHost='" + getSourceHost() + '\'' +
                 ", bodyType=" + getBodyType() +
+                ", agentChannelId=" + agentChannelId +
                 ", data=" + Arrays.toString(getData()) +
                 "} " + super.toString();
     }
