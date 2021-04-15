@@ -11,9 +11,11 @@ public abstract class MessageBody<T extends MessageBodyType> {
     private final int targetPort;
     private final T bodyType;
     private final byte[] data;
+    private final String targetChannelId;
+    private final String agentChannelId;
 
     public MessageBody(String id, String userToken, String sourceHost, int sourcePort, String targetHost,
-                       int targetPort, T bodyType, byte[] data) {
+                       int targetPort, T bodyType, String agentChannelId, String targetChannelId, byte[] data) {
         this.id = id;
         this.userToken = userToken;
         this.targetHost = targetHost;
@@ -22,6 +24,8 @@ public abstract class MessageBody<T extends MessageBodyType> {
         this.sourcePort = sourcePort;
         this.bodyType = bodyType;
         this.data = data;
+        this.agentChannelId = agentChannelId;
+        this.targetChannelId = targetChannelId;
     }
 
     public String getId() {
@@ -56,6 +60,14 @@ public abstract class MessageBody<T extends MessageBodyType> {
         return data;
     }
 
+    public String getTargetChannelId() {
+        return targetChannelId;
+    }
+
+    public String getAgentChannelId() {
+        return agentChannelId;
+    }
+
     @Override
     public String toString() {
         return "MessageBody{" +
@@ -67,6 +79,8 @@ public abstract class MessageBody<T extends MessageBodyType> {
                 ", targetPort=" + targetPort +
                 ", bodyType=" + bodyType +
                 ", data=" + Arrays.toString(data) +
+                ", targetChannelId='" + targetChannelId + '\'' +
+                ", agentChannelId='" + agentChannelId + '\'' +
                 '}';
     }
 }

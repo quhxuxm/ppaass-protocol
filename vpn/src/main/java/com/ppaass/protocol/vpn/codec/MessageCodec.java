@@ -107,6 +107,13 @@ public class MessageCodec {
             tempBuffer.writeInt(agentChannelIdByteArray.length);
             tempBuffer.writeBytes(agentChannelIdByteArray);
         }
+        if (agentMessageBody.getTargetChannelId() == null) {
+            tempBuffer.writeInt(0);
+        } else {
+            byte[] targetChannelIdByteArray = agentMessageBody.getTargetChannelId().getBytes(StandardCharsets.UTF_8);
+            tempBuffer.writeInt(targetChannelIdByteArray.length);
+            tempBuffer.writeBytes(targetChannelIdByteArray);
+        }
         if (agentMessageBody.getData() == null) {
             tempBuffer.writeInt(0);
         } else {
@@ -143,6 +150,13 @@ public class MessageCodec {
         tempBuffer.writeInt(targetAddressByteArray.length);
         tempBuffer.writeBytes(targetAddressByteArray);
         tempBuffer.writeInt(proxyMessageBody.getTargetPort());
+        if (proxyMessageBody.getAgentChannelId() == null) {
+            tempBuffer.writeInt(0);
+        } else {
+            byte[] agentChannelIdByteArray = proxyMessageBody.getAgentChannelId().getBytes(StandardCharsets.UTF_8);
+            tempBuffer.writeInt(agentChannelIdByteArray.length);
+            tempBuffer.writeBytes(agentChannelIdByteArray);
+        }
         if (proxyMessageBody.getTargetChannelId() == null) {
             tempBuffer.writeInt(0);
         } else {
@@ -197,6 +211,12 @@ public class MessageCodec {
             agentChannelId = messageBodyByteBuf.readCharSequence(agentChannelIdLength,
                     StandardCharsets.UTF_8).toString();
         }
+        int targetChannelIdLength = messageBodyByteBuf.readInt();
+        String targetChannelId = null;
+        if (targetChannelIdLength > 0) {
+            targetChannelId = messageBodyByteBuf.readCharSequence(targetChannelIdLength,
+                    StandardCharsets.UTF_8).toString();
+        }
         int originalDataLength = messageBodyByteBuf.readInt();
         byte[] originalData = null;
         if (originalDataLength > 0) {
@@ -204,7 +224,7 @@ public class MessageCodec {
         }
         messageBodyByteBuf.readBytes(originalData);
         return new AgentMessageBody(messageId, agentInstanceId, userToken, sourceAddress, sourcePort, targetAddress,
-                targetPort, bodyType, agentChannelId,
+                targetPort, bodyType, agentChannelId, targetChannelId,
                 originalData);
     }
 
@@ -236,6 +256,12 @@ public class MessageCodec {
         String targetAddress = messageBodyByteBuf.readCharSequence(targetAddressLength,
                 StandardCharsets.UTF_8).toString();
         int targetPort = messageBodyByteBuf.readInt();
+        int agentChannelIdLength = messageBodyByteBuf.readInt();
+        String agentChannelId = null;
+        if (agentChannelIdLength > 0) {
+            agentChannelId = messageBodyByteBuf.readCharSequence(agentChannelIdLength,
+                    StandardCharsets.UTF_8).toString();
+        }
         int targetChannelIdLength = messageBodyByteBuf.readInt();
         String targetChannelId = null;
         if (targetChannelIdLength > 0) {
@@ -249,7 +275,7 @@ public class MessageCodec {
         }
         messageBodyByteBuf.readBytes(originalData);
         return new ProxyMessageBody(messageId, proxyInstanceId, userToken, sourceAddress, sourcePort, targetAddress,
-                targetPort, bodyType, targetChannelId,
+                targetPort, bodyType, agentChannelId, targetChannelId,
                 originalData);
     }
 
