@@ -28,8 +28,8 @@ public class ProxyMessageBody extends MessageBody<ProxyMessageBodyType> {
                 ", sourceHost='" + getSourceHost() + '\'' +
                 ", bodyType=" + getBodyType() +
                 ", data=" + Arrays.toString(getData()) +
-                ", targetTcpChannelId='" + getTargetTcpChannelId() + '\'' +
-                ", agentTcpChannelId='" + getAgentTcpChannelId() + '\'' +
+                ", targetChannelId='" + getTargetChannelId() + '\'' +
+                ", agentChannelId='" + getAgentChannelId() + '\'' +
                 ", proxyInstanceId='" + proxyInstanceId + '\'' +
                 "} ";
     }

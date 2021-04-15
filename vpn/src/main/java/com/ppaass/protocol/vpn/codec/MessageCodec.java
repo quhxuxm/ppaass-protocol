@@ -100,17 +100,17 @@ public class MessageCodec {
         tempBuffer.writeInt(targetAddressByteArray.length);
         tempBuffer.writeBytes(targetAddressByteArray);
         tempBuffer.writeInt(agentMessageBody.getTargetPort());
-        if (agentMessageBody.getAgentTcpChannelId() == null) {
+        if (agentMessageBody.getAgentChannelId() == null) {
             tempBuffer.writeInt(0);
         } else {
-            byte[] agentChannelIdByteArray = agentMessageBody.getAgentTcpChannelId().getBytes(StandardCharsets.UTF_8);
+            byte[] agentChannelIdByteArray = agentMessageBody.getAgentChannelId().getBytes(StandardCharsets.UTF_8);
             tempBuffer.writeInt(agentChannelIdByteArray.length);
             tempBuffer.writeBytes(agentChannelIdByteArray);
         }
-        if (agentMessageBody.getTargetTcpChannelId() == null) {
+        if (agentMessageBody.getTargetChannelId() == null) {
             tempBuffer.writeInt(0);
         } else {
-            byte[] targetChannelIdByteArray = agentMessageBody.getTargetTcpChannelId().getBytes(StandardCharsets.UTF_8);
+            byte[] targetChannelIdByteArray = agentMessageBody.getTargetChannelId().getBytes(StandardCharsets.UTF_8);
             tempBuffer.writeInt(targetChannelIdByteArray.length);
             tempBuffer.writeBytes(targetChannelIdByteArray);
         }
@@ -150,17 +150,17 @@ public class MessageCodec {
         tempBuffer.writeInt(targetAddressByteArray.length);
         tempBuffer.writeBytes(targetAddressByteArray);
         tempBuffer.writeInt(proxyMessageBody.getTargetPort());
-        if (proxyMessageBody.getAgentTcpChannelId() == null) {
+        if (proxyMessageBody.getAgentChannelId() == null) {
             tempBuffer.writeInt(0);
         } else {
-            byte[] agentChannelIdByteArray = proxyMessageBody.getAgentTcpChannelId().getBytes(StandardCharsets.UTF_8);
+            byte[] agentChannelIdByteArray = proxyMessageBody.getAgentChannelId().getBytes(StandardCharsets.UTF_8);
             tempBuffer.writeInt(agentChannelIdByteArray.length);
             tempBuffer.writeBytes(agentChannelIdByteArray);
         }
-        if (proxyMessageBody.getTargetTcpChannelId() == null) {
+        if (proxyMessageBody.getTargetChannelId() == null) {
             tempBuffer.writeInt(0);
         } else {
-            byte[] targetChannelIdByteArray = proxyMessageBody.getTargetTcpChannelId().getBytes(StandardCharsets.UTF_8);
+            byte[] targetChannelIdByteArray = proxyMessageBody.getTargetChannelId().getBytes(StandardCharsets.UTF_8);
             tempBuffer.writeInt(targetChannelIdByteArray.length);
             tempBuffer.writeBytes(targetChannelIdByteArray);
         }
