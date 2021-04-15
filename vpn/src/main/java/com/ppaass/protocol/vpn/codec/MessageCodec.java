@@ -100,12 +100,20 @@ public class MessageCodec {
         tempBuffer.writeInt(targetAddressByteArray.length);
         tempBuffer.writeBytes(targetAddressByteArray);
         tempBuffer.writeInt(agentMessageBody.getTargetPort());
-        byte[] agentChannelIdByteArray = agentMessageBody.getAgentChannelId().getBytes(StandardCharsets.UTF_8);
-        tempBuffer.writeInt(agentChannelIdByteArray.length);
-        tempBuffer.writeBytes(agentChannelIdByteArray);
-        byte[] targetOriginalData = agentMessageBody.getData();
-        tempBuffer.writeInt(targetOriginalData.length);
-        tempBuffer.writeBytes(targetOriginalData);
+        if (agentMessageBody.getAgentChannelId() == null) {
+            tempBuffer.writeInt(0);
+        } else {
+            byte[] agentChannelIdByteArray = agentMessageBody.getAgentChannelId().getBytes(StandardCharsets.UTF_8);
+            tempBuffer.writeInt(agentChannelIdByteArray.length);
+            tempBuffer.writeBytes(agentChannelIdByteArray);
+        }
+        if (agentMessageBody.getData() == null) {
+            tempBuffer.writeInt(0);
+        } else {
+            byte[] targetOriginalData = agentMessageBody.getData();
+            tempBuffer.writeInt(targetOriginalData.length);
+            tempBuffer.writeBytes(targetOriginalData);
+        }
         return Unpooled.wrappedBuffer(encryptMessageBody(
                 tempBuffer.array(),
                 messageBodyBodyEncryptionType,
@@ -135,12 +143,20 @@ public class MessageCodec {
         tempBuffer.writeInt(targetAddressByteArray.length);
         tempBuffer.writeBytes(targetAddressByteArray);
         tempBuffer.writeInt(proxyMessageBody.getTargetPort());
-        byte[] targetChannelIdByteArray = proxyMessageBody.getTargetChannelId().getBytes(StandardCharsets.UTF_8);
-        tempBuffer.writeInt(targetChannelIdByteArray.length);
-        tempBuffer.writeBytes(targetChannelIdByteArray);
-        byte[] targetOriginalData = proxyMessageBody.getData();
-        tempBuffer.writeInt(targetOriginalData.length);
-        tempBuffer.writeBytes(targetOriginalData);
+        if (proxyMessageBody.getTargetChannelId() == null) {
+            tempBuffer.writeInt(0);
+        } else {
+            byte[] targetChannelIdByteArray = proxyMessageBody.getTargetChannelId().getBytes(StandardCharsets.UTF_8);
+            tempBuffer.writeInt(targetChannelIdByteArray.length);
+            tempBuffer.writeBytes(targetChannelIdByteArray);
+        }
+        if (proxyMessageBody.getData() == null) {
+            tempBuffer.writeInt(0);
+        } else {
+            byte[] targetOriginalData = proxyMessageBody.getData();
+            tempBuffer.writeInt(targetOriginalData.length);
+            tempBuffer.writeBytes(targetOriginalData);
+        }
         return Unpooled.wrappedBuffer(encryptMessageBody(
                 tempBuffer.array(),
                 messageBodyBodyEncryptionType,
@@ -176,10 +192,16 @@ public class MessageCodec {
                 StandardCharsets.UTF_8).toString();
         int targetPort = messageBodyByteBuf.readInt();
         int agentChannelIdLength = messageBodyByteBuf.readInt();
-        String agentChannelId = messageBodyByteBuf.readCharSequence(agentChannelIdLength,
-                StandardCharsets.UTF_8).toString();
+        String agentChannelId = null;
+        if (agentChannelIdLength > 0) {
+            agentChannelId = messageBodyByteBuf.readCharSequence(agentChannelIdLength,
+                    StandardCharsets.UTF_8).toString();
+        }
         int originalDataLength = messageBodyByteBuf.readInt();
-        byte[] originalData = new byte[originalDataLength];
+        byte[] originalData = null;
+        if (originalDataLength > 0) {
+            originalData = new byte[originalDataLength];
+        }
         messageBodyByteBuf.readBytes(originalData);
         return new AgentMessageBody(messageId, agentInstanceId, userToken, sourceAddress, sourcePort, targetAddress,
                 targetPort, bodyType, agentChannelId,
@@ -215,10 +237,16 @@ public class MessageCodec {
                 StandardCharsets.UTF_8).toString();
         int targetPort = messageBodyByteBuf.readInt();
         int targetChannelIdLength = messageBodyByteBuf.readInt();
-        String targetChannelId = messageBodyByteBuf.readCharSequence(targetChannelIdLength,
-                StandardCharsets.UTF_8).toString();
+        String targetChannelId = null;
+        if (targetChannelIdLength > 0) {
+            targetChannelId = messageBodyByteBuf.readCharSequence(targetChannelIdLength,
+                    StandardCharsets.UTF_8).toString();
+        }
         int originalDataLength = messageBodyByteBuf.readInt();
-        byte[] originalData = new byte[originalDataLength];
+        byte[] originalData = null;
+        if (originalDataLength > 0) {
+            originalData = new byte[originalDataLength];
+        }
         messageBodyByteBuf.readBytes(originalData);
         return new ProxyMessageBody(messageId, proxyInstanceId, userToken, sourceAddress, sourcePort, targetAddress,
                 targetPort, bodyType, targetChannelId,
