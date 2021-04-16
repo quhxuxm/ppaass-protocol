@@ -28,9 +28,7 @@ public enum ProxyMessageBodyType implements MessageBodyType {
     /**
      * Fail on transfer UDP data
      */
-    UDP_DATA_FAIL(6),
-    UDP_OVER_TCP_CONNECT_SUCCESS(7),
-    UDP_OVER_TCP_CONNECT_FAIL(8);
+    UDP_DATA_FAIL(6);
     private final int value;
 
     ProxyMessageBodyType(int value) {
