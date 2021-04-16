@@ -78,7 +78,6 @@ public abstract class MessageBody<T extends MessageBodyType> {
                 ", targetHost='" + targetHost + '\'' +
                 ", targetPort=" + targetPort +
                 ", bodyType=" + bodyType +
-                ", data=" + Arrays.toString(data) +
                 ", targetChannelId='" + targetChannelId + '\'' +
                 ", agentChannelId='" + agentChannelId + '\'' +
                 '}';
