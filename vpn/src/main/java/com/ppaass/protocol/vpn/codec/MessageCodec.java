@@ -160,7 +160,7 @@ public class MessageCodec {
         if (proxyMessageBodyType == null) {
             tempBuffer.writeInt(0);
         } else {
-            int bodyType = proxyMessageBody.getBodyType().value();
+            int bodyType = proxyMessageBodyType.value();
             tempBuffer.writeInt(bodyType);
         }
         if (proxyMessageBody.getId() == null) {
@@ -236,7 +236,7 @@ public class MessageCodec {
         AgentMessageBodyType bodyType = null;
         int messageBodyTypeValue = messageBodyByteBuf.readInt();
         if (messageBodyTypeValue != 0) {
-            bodyType = parseAgentMessageBodyType(messageBodyByteBuf.readInt());
+            bodyType = parseAgentMessageBodyType(messageBodyTypeValue);
         }
         String messageId = null;
         int messageIdLength = messageBodyByteBuf.readInt();
@@ -286,8 +286,8 @@ public class MessageCodec {
         byte[] originalData = null;
         if (originalDataLength > 0) {
             originalData = new byte[originalDataLength];
+            messageBodyByteBuf.readBytes(originalData);
         }
-        messageBodyByteBuf.readBytes(originalData);
         return new AgentMessageBody(messageId, agentInstanceId, userToken, sourceAddress, sourcePort, targetAddress,
                 targetPort, bodyType, agentChannelId, targetChannelId,
                 originalData);
@@ -302,7 +302,7 @@ public class MessageCodec {
         ProxyMessageBodyType bodyType = null;
         int messageBodyTypeValue = messageBodyByteBuf.readInt();
         if (messageBodyTypeValue > 0) {
-            bodyType = parseProxyMessageBodyType(messageBodyByteBuf.readInt());
+            bodyType = parseProxyMessageBodyType(messageBodyTypeValue);
         }
         String messageId = null;
         int messageIdLength = messageBodyByteBuf.readInt();
@@ -351,8 +351,8 @@ public class MessageCodec {
         byte[] originalData = null;
         if (originalDataLength > 0) {
             originalData = new byte[originalDataLength];
+            messageBodyByteBuf.readBytes(originalData);
         }
-        messageBodyByteBuf.readBytes(originalData);
         return new ProxyMessageBody(messageId, proxyInstanceId, userToken, sourceAddress, sourcePort, targetAddress,
                 targetPort, bodyType, agentChannelId, targetChannelId,
                 originalData);
