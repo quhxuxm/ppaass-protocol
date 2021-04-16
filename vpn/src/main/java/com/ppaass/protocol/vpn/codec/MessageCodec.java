@@ -81,24 +81,49 @@ public class MessageCodec {
                                                                        EncryptionType messageBodyBodyEncryptionType,
                                                                        byte[] messageBodyEncryptionToken) {
         ByteBuf tempBuffer = Unpooled.buffer();
-        int bodyType = agentMessageBody.getBodyType().value();
-        tempBuffer.writeByte(bodyType);
-        byte[] messageIdByteArray = agentMessageBody.getId().getBytes(StandardCharsets.UTF_8);
-        tempBuffer.writeInt(messageIdByteArray.length);
-        tempBuffer.writeBytes(messageIdByteArray);
-        byte[] agentInstanceIdByteArray = agentMessageBody.getAgentInstanceId().getBytes(StandardCharsets.UTF_8);
-        tempBuffer.writeInt(agentInstanceIdByteArray.length);
-        tempBuffer.writeBytes(agentInstanceIdByteArray);
-        byte[] userTokenByteArray = agentMessageBody.getUserToken().getBytes(StandardCharsets.UTF_8);
-        tempBuffer.writeInt(userTokenByteArray.length);
-        tempBuffer.writeBytes(userTokenByteArray);
-        byte[] sourceAddressByteArray = agentMessageBody.getSourceHost().getBytes(StandardCharsets.UTF_8);
-        tempBuffer.writeInt(sourceAddressByteArray.length);
-        tempBuffer.writeBytes(sourceAddressByteArray);
+        AgentMessageBodyType agentMessageBodyType = agentMessageBody.getBodyType();
+        if (agentMessageBodyType == null) {
+            tempBuffer.writeInt(0);
+        } else {
+            int bodyType = agentMessageBodyType.value();
+            tempBuffer.writeByte(bodyType);
+        }
+        if (agentMessageBody.getId() == null) {
+            tempBuffer.writeInt(0);
+        } else {
+            byte[] messageIdByteArray = agentMessageBody.getId().getBytes(StandardCharsets.UTF_8);
+            tempBuffer.writeInt(messageIdByteArray.length);
+            tempBuffer.writeBytes(messageIdByteArray);
+        }
+        if (agentMessageBody.getAgentInstanceId() == null) {
+            tempBuffer.writeInt(0);
+        } else {
+            byte[] agentInstanceIdByteArray = agentMessageBody.getAgentInstanceId().getBytes(StandardCharsets.UTF_8);
+            tempBuffer.writeInt(agentInstanceIdByteArray.length);
+            tempBuffer.writeBytes(agentInstanceIdByteArray);
+        }
+        if (agentMessageBody.getUserToken() == null) {
+            tempBuffer.writeInt(0);
+        } else {
+            byte[] userTokenByteArray = agentMessageBody.getUserToken().getBytes(StandardCharsets.UTF_8);
+            tempBuffer.writeInt(userTokenByteArray.length);
+            tempBuffer.writeBytes(userTokenByteArray);
+        }
+        if (agentMessageBody.getSourceHost() == null) {
+            tempBuffer.writeInt(0);
+        } else {
+            byte[] sourceAddressByteArray = agentMessageBody.getSourceHost().getBytes(StandardCharsets.UTF_8);
+            tempBuffer.writeInt(sourceAddressByteArray.length);
+            tempBuffer.writeBytes(sourceAddressByteArray);
+        }
         tempBuffer.writeInt(agentMessageBody.getSourcePort());
-        byte[] targetAddressByteArray = agentMessageBody.getTargetHost().getBytes(StandardCharsets.UTF_8);
-        tempBuffer.writeInt(targetAddressByteArray.length);
-        tempBuffer.writeBytes(targetAddressByteArray);
+        if (agentMessageBody.getTargetHost() == null) {
+            tempBuffer.writeInt(0);
+        } else {
+            byte[] targetAddressByteArray = agentMessageBody.getTargetHost().getBytes(StandardCharsets.UTF_8);
+            tempBuffer.writeInt(targetAddressByteArray.length);
+            tempBuffer.writeBytes(targetAddressByteArray);
+        }
         tempBuffer.writeInt(agentMessageBody.getTargetPort());
         if (agentMessageBody.getAgentChannelId() == null) {
             tempBuffer.writeInt(0);
@@ -131,24 +156,49 @@ public class MessageCodec {
                                                                        EncryptionType messageBodyBodyEncryptionType,
                                                                        byte[] messageBodyEncryptionToken) {
         ByteBuf tempBuffer = Unpooled.buffer();
-        int bodyType = proxyMessageBody.getBodyType().value();
-        tempBuffer.writeByte(bodyType);
-        byte[] messageIdByteArray = proxyMessageBody.getId().getBytes(StandardCharsets.UTF_8);
-        tempBuffer.writeInt(messageIdByteArray.length);
-        tempBuffer.writeBytes(messageIdByteArray);
-        byte[] proxyInstanceIdByteArray = proxyMessageBody.getProxyInstanceId().getBytes(StandardCharsets.UTF_8);
-        tempBuffer.writeInt(proxyInstanceIdByteArray.length);
-        tempBuffer.writeBytes(proxyInstanceIdByteArray);
-        byte[] userTokenByteArray = proxyMessageBody.getUserToken().getBytes(StandardCharsets.UTF_8);
-        tempBuffer.writeInt(userTokenByteArray.length);
-        tempBuffer.writeBytes(userTokenByteArray);
-        byte[] sourceAddressByteArray = proxyMessageBody.getSourceHost().getBytes(StandardCharsets.UTF_8);
-        tempBuffer.writeInt(sourceAddressByteArray.length);
-        tempBuffer.writeBytes(sourceAddressByteArray);
+        ProxyMessageBodyType proxyMessageBodyType = proxyMessageBody.getBodyType();
+        if (proxyMessageBodyType == null) {
+            tempBuffer.writeInt(0);
+        } else {
+            int bodyType = proxyMessageBody.getBodyType().value();
+            tempBuffer.writeByte(bodyType);
+        }
+        if (proxyMessageBody.getId() == null) {
+            tempBuffer.writeInt(0);
+        } else {
+            byte[] messageIdByteArray = proxyMessageBody.getId().getBytes(StandardCharsets.UTF_8);
+            tempBuffer.writeInt(messageIdByteArray.length);
+            tempBuffer.writeBytes(messageIdByteArray);
+        }
+        if (proxyMessageBody.getProxyInstanceId() == null) {
+            tempBuffer.writeInt(0);
+        } else {
+            byte[] proxyInstanceIdByteArray = proxyMessageBody.getProxyInstanceId().getBytes(StandardCharsets.UTF_8);
+            tempBuffer.writeInt(proxyInstanceIdByteArray.length);
+            tempBuffer.writeBytes(proxyInstanceIdByteArray);
+        }
+        if (proxyMessageBody.getUserToken() == null) {
+            tempBuffer.writeInt(0);
+        } else {
+            byte[] userTokenByteArray = proxyMessageBody.getUserToken().getBytes(StandardCharsets.UTF_8);
+            tempBuffer.writeInt(userTokenByteArray.length);
+            tempBuffer.writeBytes(userTokenByteArray);
+        }
+        if (proxyMessageBody.getSourceHost() == null) {
+            tempBuffer.writeInt(0);
+        } else {
+            byte[] sourceAddressByteArray = proxyMessageBody.getSourceHost().getBytes(StandardCharsets.UTF_8);
+            tempBuffer.writeInt(sourceAddressByteArray.length);
+            tempBuffer.writeBytes(sourceAddressByteArray);
+        }
         tempBuffer.writeInt(proxyMessageBody.getSourcePort());
-        byte[] targetAddressByteArray = proxyMessageBody.getTargetHost().getBytes(StandardCharsets.UTF_8);
-        tempBuffer.writeInt(targetAddressByteArray.length);
-        tempBuffer.writeBytes(targetAddressByteArray);
+        if (proxyMessageBody.getTargetHost() == null) {
+            tempBuffer.writeInt(0);
+        } else {
+            byte[] targetAddressByteArray = proxyMessageBody.getTargetHost().getBytes(StandardCharsets.UTF_8);
+            tempBuffer.writeInt(targetAddressByteArray.length);
+            tempBuffer.writeBytes(targetAddressByteArray);
+        }
         tempBuffer.writeInt(proxyMessageBody.getTargetPort());
         if (proxyMessageBody.getAgentChannelId() == null) {
             tempBuffer.writeInt(0);
@@ -183,27 +233,42 @@ public class MessageCodec {
         byte[] messageBodyBytes =
                 decryptMessageBody(messageBytes, messageBodyBodyEncryptionType, messageBodyEncryptionToken);
         ByteBuf messageBodyByteBuf = Unpooled.wrappedBuffer(messageBodyBytes);
-        AgentMessageBodyType bodyType = parseAgentMessageBodyType(messageBodyByteBuf.readByte());
-        if (bodyType == null) {
-            throw new PpaassProtocolException(
-                    "Can not parse agent message body type from the message.");
+        AgentMessageBodyType bodyType = null;
+        int messageBodyTypeValue = messageBodyByteBuf.readInt();
+        if (messageBodyTypeValue != 0) {
+            bodyType = parseAgentMessageBodyType(messageBodyByteBuf.readByte());
         }
+        String messageId = null;
         int messageIdLength = messageBodyByteBuf.readInt();
-        String messageId =
-                messageBodyByteBuf.readCharSequence(messageIdLength, StandardCharsets.UTF_8).toString();
+        if (messageIdLength > 0) {
+            messageId =
+                    messageBodyByteBuf.readCharSequence(messageIdLength, StandardCharsets.UTF_8).toString();
+        }
+        String agentInstanceId = null;
         int agentInstanceIdLength = messageBodyByteBuf.readInt();
-        String agentInstanceId =
-                messageBodyByteBuf.readCharSequence(agentInstanceIdLength, StandardCharsets.UTF_8).toString();
+        if (agentInstanceIdLength > 0) {
+            agentInstanceId =
+                    messageBodyByteBuf.readCharSequence(agentInstanceIdLength, StandardCharsets.UTF_8).toString();
+        }
+        String userToken = null;
         int userTokenLength = messageBodyByteBuf.readInt();
-        String userToken =
-                messageBodyByteBuf.readCharSequence(userTokenLength, StandardCharsets.UTF_8).toString();
+        if (userTokenLength > 0) {
+            userToken =
+                    messageBodyByteBuf.readCharSequence(userTokenLength, StandardCharsets.UTF_8).toString();
+        }
+        String sourceAddress = null;
         int sourceAddressLength = messageBodyByteBuf.readInt();
-        String sourceAddress = messageBodyByteBuf.readCharSequence(sourceAddressLength,
-                StandardCharsets.UTF_8).toString();
+        if (sourceAddressLength > 0) {
+            sourceAddress = messageBodyByteBuf.readCharSequence(sourceAddressLength,
+                    StandardCharsets.UTF_8).toString();
+        }
         int sourcePort = messageBodyByteBuf.readInt();
+        String targetAddress = null;
         int targetAddressLength = messageBodyByteBuf.readInt();
-        String targetAddress = messageBodyByteBuf.readCharSequence(targetAddressLength,
-                StandardCharsets.UTF_8).toString();
+        if (targetAddressLength > 0) {
+            targetAddress = messageBodyByteBuf.readCharSequence(targetAddressLength,
+                    StandardCharsets.UTF_8).toString();
+        }
         int targetPort = messageBodyByteBuf.readInt();
         int agentChannelIdLength = messageBodyByteBuf.readInt();
         String agentChannelId = null;
@@ -234,27 +299,41 @@ public class MessageCodec {
         byte[] messageBodyBytes =
                 decryptMessageBody(messageBytes, messageBodyBodyEncryptionType, messageBodyEncryptionToken);
         ByteBuf messageBodyByteBuf = Unpooled.wrappedBuffer(messageBodyBytes);
-        ProxyMessageBodyType bodyType = parseProxyMessageBodyType(messageBodyByteBuf.readByte());
-        if (bodyType == null) {
-            throw new PpaassProtocolException(
-                    "Can not parse proxy message body type from the message.");
+        ProxyMessageBodyType bodyType = null;
+        int messageBodyTypeValue = messageBodyByteBuf.readInt();
+        if (messageBodyTypeValue > 0) {
+            bodyType = parseProxyMessageBodyType(messageBodyByteBuf.readByte());
         }
+        String messageId = null;
         int messageIdLength = messageBodyByteBuf.readInt();
-        String messageId =
-                messageBodyByteBuf.readCharSequence(messageIdLength, StandardCharsets.UTF_8).toString();
+        if (messageIdLength > 0) {
+            messageId = messageBodyByteBuf.readCharSequence(messageIdLength, StandardCharsets.UTF_8).toString();
+        }
+        String proxyInstanceId = null;
         int proxyInstanceIdLength = messageBodyByteBuf.readInt();
-        String proxyInstanceId =
-                messageBodyByteBuf.readCharSequence(proxyInstanceIdLength, StandardCharsets.UTF_8).toString();
+        if (proxyInstanceIdLength > 0) {
+            proxyInstanceId =
+                    messageBodyByteBuf.readCharSequence(proxyInstanceIdLength, StandardCharsets.UTF_8).toString();
+        }
+        String userToken = null;
         int userTokenLength = messageBodyByteBuf.readInt();
-        String userToken =
-                messageBodyByteBuf.readCharSequence(userTokenLength, StandardCharsets.UTF_8).toString();
+        if (userTokenLength > 0) {
+            userToken =
+                    messageBodyByteBuf.readCharSequence(userTokenLength, StandardCharsets.UTF_8).toString();
+        }
+        String sourceAddress = null;
         int sourceAddressLength = messageBodyByteBuf.readInt();
-        String sourceAddress = messageBodyByteBuf.readCharSequence(sourceAddressLength,
-                StandardCharsets.UTF_8).toString();
+        if (sourceAddressLength > 0) {
+            sourceAddress = messageBodyByteBuf.readCharSequence(sourceAddressLength,
+                    StandardCharsets.UTF_8).toString();
+        }
         int sourcePort = messageBodyByteBuf.readInt();
+        String targetAddress = null;
         int targetAddressLength = messageBodyByteBuf.readInt();
-        String targetAddress = messageBodyByteBuf.readCharSequence(targetAddressLength,
-                StandardCharsets.UTF_8).toString();
+        if (targetAddressLength > 0) {
+            targetAddress = messageBodyByteBuf.readCharSequence(targetAddressLength,
+                    StandardCharsets.UTF_8).toString();
+        }
         int targetPort = messageBodyByteBuf.readInt();
         int agentChannelIdLength = messageBodyByteBuf.readInt();
         String agentChannelId = null;
