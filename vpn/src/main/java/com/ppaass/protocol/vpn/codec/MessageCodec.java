@@ -20,7 +20,7 @@ public class MessageCodec {
     private MessageCodec() {
     }
 
-    private AgentMessageBodyType parseAgentMessageBodyType(byte b) {
+    private AgentMessageBodyType parseAgentMessageBodyType(int b) {
         for (AgentMessageBodyType e : AgentMessageBodyType.values()) {
             if (e.value() == b) {
                 return e;
@@ -29,7 +29,7 @@ public class MessageCodec {
         return null;
     }
 
-    private ProxyMessageBodyType parseProxyMessageBodyType(byte b) {
+    private ProxyMessageBodyType parseProxyMessageBodyType(int b) {
         for (ProxyMessageBodyType e : ProxyMessageBodyType.values()) {
             if (e.value() == b) {
                 return e;
@@ -86,7 +86,7 @@ public class MessageCodec {
             tempBuffer.writeInt(0);
         } else {
             int bodyType = agentMessageBodyType.value();
-            tempBuffer.writeByte(bodyType);
+            tempBuffer.writeInt(bodyType);
         }
         if (agentMessageBody.getId() == null) {
             tempBuffer.writeInt(0);
@@ -161,7 +161,7 @@ public class MessageCodec {
             tempBuffer.writeInt(0);
         } else {
             int bodyType = proxyMessageBody.getBodyType().value();
-            tempBuffer.writeByte(bodyType);
+            tempBuffer.writeInt(bodyType);
         }
         if (proxyMessageBody.getId() == null) {
             tempBuffer.writeInt(0);
@@ -236,7 +236,7 @@ public class MessageCodec {
         AgentMessageBodyType bodyType = null;
         int messageBodyTypeValue = messageBodyByteBuf.readInt();
         if (messageBodyTypeValue != 0) {
-            bodyType = parseAgentMessageBodyType(messageBodyByteBuf.readByte());
+            bodyType = parseAgentMessageBodyType(messageBodyByteBuf.readInt());
         }
         String messageId = null;
         int messageIdLength = messageBodyByteBuf.readInt();
@@ -302,7 +302,7 @@ public class MessageCodec {
         ProxyMessageBodyType bodyType = null;
         int messageBodyTypeValue = messageBodyByteBuf.readInt();
         if (messageBodyTypeValue > 0) {
-            bodyType = parseProxyMessageBodyType(messageBodyByteBuf.readByte());
+            bodyType = parseProxyMessageBodyType(messageBodyByteBuf.readInt());
         }
         String messageId = null;
         int messageIdLength = messageBodyByteBuf.readInt();
