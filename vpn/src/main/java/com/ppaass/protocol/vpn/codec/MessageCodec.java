@@ -1,20 +1,20 @@
 package com.ppaass.protocol.vpn.codec;
 
 import com.ppaass.common.exception.PpaassException;
+import com.ppaass.common.log.IPpaassLogger;
+import com.ppaass.common.log.PpaassLoggerFactory;
 import com.ppaass.protocol.vpn.cryptography.CryptographyUtil;
 import com.ppaass.protocol.vpn.message.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import io.netty.util.ReferenceCountUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
 
 public class MessageCodec {
     private static final byte[] MAGIC_CODE = "__PPAASS__".getBytes(StandardCharsets.UTF_8);
-    private static final Logger logger = LoggerFactory.getLogger(MessageCodec.class);
+    private static final IPpaassLogger logger = PpaassLoggerFactory.INSTANCE.getLogger();
     public static final MessageCodec INSTANCE = new MessageCodec();
 
     private MessageCodec() {
@@ -418,8 +418,8 @@ public class MessageCodec {
         ByteBuf magicCodeByteBuf = input.readBytes(MAGIC_CODE.length);
         if (magicCodeByteBuf.compareTo(Unpooled.wrappedBuffer(MAGIC_CODE)) != 0) {
             logger.error(
-                    "Incoming agent message is not follow Ppaass protocol, incoming message is:\n{}\n"
-                    , ByteBufUtil.prettyHexDump(input));
+                    () -> "Incoming agent message is not follow Ppaass protocol, incoming message is:\n{}\n"
+                    , () -> new Object[]{ByteBufUtil.prettyHexDump(input)});
             throw new PpaassException("Incoming message is not follow Ppaass protocol.");
         }
         ReferenceCountUtil.release(magicCodeByteBuf);
@@ -456,8 +456,8 @@ public class MessageCodec {
         ByteBuf magicCodeByteBuf = input.readBytes(MAGIC_CODE.length);
         if (magicCodeByteBuf.compareTo(Unpooled.wrappedBuffer(MAGIC_CODE)) != 0) {
             logger.error(
-                    "Incoming proxy message is not follow Ppaass protocol, incoming message is:\n${}\n",
-                    ByteBufUtil.prettyHexDump(input)
+                    () -> "Incoming proxy message is not follow Ppaass protocol, incoming message is:\n${}\n",
+                    () -> new Object[]{ByteBufUtil.prettyHexDump(input)}
             );
             throw new PpaassException("Incoming message is not follow Ppaass protocol.");
         }
