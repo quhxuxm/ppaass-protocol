@@ -14,10 +14,13 @@ public enum EncryptionType {
     private static final Random random = new Random();
 
     public static EncryptionType choose() {
-        int index = random.nextInt(EncryptionType.values().length);
-        return EncryptionType.values()[index];
+        return EncryptionType.BLOWFISH;
     }
 
+    //  public static EncryptionType choose() {
+    //        int index = random.nextInt(EncryptionType.values().length);
+    //        return EncryptionType.values()[index];
+    //    }
     private final int value;
 
     EncryptionType(int value) {
