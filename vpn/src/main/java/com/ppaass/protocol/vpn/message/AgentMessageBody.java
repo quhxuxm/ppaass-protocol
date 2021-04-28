@@ -1,7 +1,5 @@
 package com.ppaass.protocol.vpn.message;
 
-import java.util.Arrays;
-
 public class AgentMessageBody extends MessageBody<AgentMessageBodyType> {
     private final String agentInstanceId;
 

@@ -19,8 +19,13 @@
             <artifactId>netty-all</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.ppaass.protocol</groupId>
-            <artifactId>common</artifactId>
+            <groupId>com.ppaass.common</groupId>
+            <artifactId>util</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ppaass.common</groupId>
+            <artifactId>log</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

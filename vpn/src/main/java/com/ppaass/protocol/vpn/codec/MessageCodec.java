@@ -1,6 +1,6 @@
 package com.ppaass.protocol.vpn.codec;
 
-import com.ppaass.protocol.common.exception.PpaassProtocolException;
+import com.ppaass.common.exception.PpaassException;
 import com.ppaass.protocol.vpn.cryptography.CryptographyUtil;
 import com.ppaass.protocol.vpn.message.*;
 import io.netty.buffer.ByteBuf;
@@ -58,7 +58,7 @@ public class MessageCodec {
                 return CryptographyUtil.INSTANCE.blowfishEncrypt(messageBodyEncryptionToken,
                         messageBodyByteArrayBeforeEncrypt);
             default:
-                throw new PpaassProtocolException("Unsupported encryption type. ");
+                throw new PpaassException("Unsupported encryption type. ");
         }
     }
 
@@ -73,7 +73,7 @@ public class MessageCodec {
                 return CryptographyUtil.INSTANCE.blowfishDecrypt(messageBodyEncryptionToken,
                         messageBodyByteArrayBeforeDecrypt);
             default:
-                throw new PpaassProtocolException("Unsupported encryption type. ");
+                throw new PpaassException("Unsupported encryption type. ");
         }
     }
 
@@ -420,7 +420,7 @@ public class MessageCodec {
             logger.error(
                     "Incoming agent message is not follow Ppaass protocol, incoming message is:\n{}\n"
                     , ByteBufUtil.prettyHexDump(input));
-            throw new PpaassProtocolException("Incoming message is not follow Ppaass protocol.");
+            throw new PpaassException("Incoming message is not follow Ppaass protocol.");
         }
         ReferenceCountUtil.release(magicCodeByteBuf);
         int encryptedMessageBodyEncryptionTokenLength = input.readInt();
@@ -431,7 +431,7 @@ public class MessageCodec {
                         proxyPrivateKey);
         EncryptionType messageBodyEncryptionType = parseEncryptionType(input.readByte());
         if (messageBodyEncryptionType == null) {
-            throw new PpaassProtocolException(
+            throw new PpaassException(
                     "Can not parse encryption type from the message.");
         }
         byte[] messageBodyByteArray = new byte[input.readableBytes()];
@@ -459,7 +459,7 @@ public class MessageCodec {
                     "Incoming proxy message is not follow Ppaass protocol, incoming message is:\n${}\n",
                     ByteBufUtil.prettyHexDump(input)
             );
-            throw new PpaassProtocolException("Incoming message is not follow Ppaass protocol.");
+            throw new PpaassException("Incoming message is not follow Ppaass protocol.");
         }
         ReferenceCountUtil.release(magicCodeByteBuf);
         int encryptedMessageBodyEncryptionTokenLength = input.readInt();
@@ -470,7 +470,7 @@ public class MessageCodec {
                         agentPrivateKey);
         EncryptionType messageBodyEncryptionType = parseEncryptionType(input.readByte());
         if (messageBodyEncryptionType == null) {
-            throw new PpaassProtocolException(
+            throw new PpaassException(
                     "Can not parse encryption type from the message.");
         }
         byte[] messageBodyByteArray = new byte[input.readableBytes()];

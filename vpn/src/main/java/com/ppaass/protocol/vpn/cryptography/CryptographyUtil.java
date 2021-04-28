@@ -1,6 +1,6 @@
 package com.ppaass.protocol.vpn.cryptography;
 
-import com.ppaass.protocol.common.exception.PpaassProtocolException;
+import com.ppaass.common.exception.PpaassException;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import org.slf4j.Logger;
@@ -48,7 +48,7 @@ public class CryptographyUtil {
                     "Fail to encrypt data with encryption token in AES because of exception. Encryption token: \n{}\n",
                     ByteBufUtil
                             .prettyHexDump(Unpooled.wrappedBuffer(encryptionToken)), e);
-            throw new PpaassProtocolException(
+            throw new PpaassException(
                     "Fail to encrypt data with encryption token in AES because of exception.",
                     e);
         }
@@ -71,7 +71,7 @@ public class CryptographyUtil {
             logger.error(
                     "Fail to decrypt data with encryption token in AES because of exception. Encryption token: \n{}\n",
                     ByteBufUtil.prettyHexDump(Unpooled.wrappedBuffer(encryptionToken)));
-            throw new PpaassProtocolException(
+            throw new PpaassException(
                     "Fail to decrypt data with encryption token in AES because of exception.",
                     e);
         }
@@ -95,7 +95,7 @@ public class CryptographyUtil {
                     "Fail to encrypt data with encryption token in Blowfish because of exception. Encryption token: \n{}\n",
                     ByteBufUtil
                             .prettyHexDump(Unpooled.wrappedBuffer(encryptionToken)), e);
-            throw new PpaassProtocolException(
+            throw new PpaassException(
                     "Fail to encrypt data with encryption token in Blowfish because of exception.",
                     e);
         }
@@ -118,7 +118,7 @@ public class CryptographyUtil {
             logger.error(
                     "Fail to decrypt data with encryption token in Blowfish because of exception. Encryption token: \n{}\n",
                     ByteBufUtil.prettyHexDump(Unpooled.wrappedBuffer(encryptionToken)));
-            throw new PpaassProtocolException(
+            throw new PpaassException(
                     "Fail to decrypt data with encryption token in Blowfish because of exception.",
                     e);
         }
@@ -145,7 +145,7 @@ public class CryptographyUtil {
                     "Fail to encrypt data with rsa public key because of exception. Target data: \n{}\nRSA public key: \n{}\n"
                     , ByteBufUtil.prettyHexDump(Unpooled.wrappedBuffer(target)),
                     ByteBufUtil.prettyHexDump(Unpooled.wrappedBuffer(publicKeyBytes)), e);
-            throw new PpaassProtocolException("Fail to encrypt data with rsa public key because of exception.", e);
+            throw new PpaassException("Fail to encrypt data with rsa public key because of exception.", e);
         }
     }
 
@@ -170,7 +170,7 @@ public class CryptographyUtil {
                     "Fail to decrypt data with rsa private key because of exception. Target data:\n{}\nRSA private key:\n{}\n"
                     , ByteBufUtil.prettyHexDump(Unpooled.wrappedBuffer(target)),
                     ByteBufUtil.prettyHexDump(Unpooled.wrappedBuffer(privateKeyBytes)), e);
-            throw new PpaassProtocolException("Fail to decrypt data with rsa private key because of exception.", e);
+            throw new PpaassException("Fail to decrypt data with rsa private key because of exception.", e);
         }
     }
 
@@ -197,7 +197,7 @@ public class CryptographyUtil {
         if (targetFile.exists()) {
             if (!targetFile.delete()) {
                 logger.error("Fail to delete existing file: {}", filePath);
-                throw new PpaassProtocolException("Fail to delete existing file.");
+                throw new PpaassException("Fail to delete existing file.");
             }
         }
         FileOutputStream fileOutputStream = new FileOutputStream(targetFile);

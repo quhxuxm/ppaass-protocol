@@ -1,7 +1,7 @@
 package com.ppaass.protocol.base.udp;
 
+import com.ppaass.common.exception.PpaassException;
 import com.ppaass.protocol.base.IProtocolConst;
-import com.ppaass.protocol.common.exception.PpaassProtocolException;
 
 import java.nio.ByteBuffer;
 
@@ -24,7 +24,7 @@ public class UdpPacketReader {
         udpPacketBuilder.data(data);
         UdpPacket result = udpPacketBuilder.build();
         if (result.getHeader().getTotalLength() != totalLength) {
-            throw new PpaassProtocolException("The total length in the input data do not match.");
+            throw new PpaassException("The total length in the input data do not match.");
         }
         byteBuffer.clear();
         return result;
