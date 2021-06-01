@@ -26,8 +26,8 @@ public class CryptographyUtil {
     private static final String AES_CIPHER = "AES/ECB/PKCS5Padding";
     private static final String BLOWFISH_CIPHER = "Blowfish/ECB/PKCS5Padding";
     public static final CryptographyUtil INSTANCE = new CryptographyUtil();
-    private Cipher rsaEncryptionCipher;
-    private Cipher rsaDecryptionCipher;
+    private PublicKey publicKey;
+    private PrivateKey privateKey;
 
     private CryptographyUtil() {
     }
@@ -36,14 +36,10 @@ public class CryptographyUtil {
         try {
             X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(rsaPublicKey);
             KeyFactory rsaEncryptionCipherKeyFactory = KeyFactory.getInstance(ALGORITHM_RSA);
-            PublicKey publicKey = rsaEncryptionCipherKeyFactory.generatePublic(publicKeySpec);
-            this.rsaEncryptionCipher = Cipher.getInstance(RSA_CHIPHER);
-            this.rsaEncryptionCipher.init(Cipher.ENCRYPT_MODE, publicKey);
+            this.publicKey = rsaEncryptionCipherKeyFactory.generatePublic(publicKeySpec);
             PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(rsaPrivateKey);
             KeyFactory rsaDecryptionCipherKeyFactory = KeyFactory.getInstance(ALGORITHM_RSA);
-            PrivateKey privateKey = rsaDecryptionCipherKeyFactory.generatePrivate(privateKeySpec);
-            this.rsaDecryptionCipher = Cipher.getInstance(RSA_CHIPHER);
-            this.rsaDecryptionCipher.init(Cipher.DECRYPT_MODE, privateKey);
+            this.privateKey = rsaDecryptionCipherKeyFactory.generatePrivate(privateKeySpec);
         } catch (Exception e) {
             logger.error(() ->
                             "Fail to init cryptography util because of exception.",
@@ -154,8 +150,10 @@ public class CryptographyUtil {
      */
     public byte[] rsaEncrypt(byte[] target) {
         try {
-            this.rsaEncryptionCipher.update(target);
-            return this.rsaEncryptionCipher.doFinal();
+            Cipher rsaEncryptionCipher = Cipher.getInstance(RSA_CHIPHER);
+            rsaEncryptionCipher.init(Cipher.ENCRYPT_MODE, publicKey);
+            rsaEncryptionCipher.update(target);
+            return rsaEncryptionCipher.doFinal();
         } catch (Exception e) {
             logger.error(
                     () -> "Fail to encrypt data with rsa public key because of exception. Target data: \n{}\n",
@@ -172,8 +170,10 @@ public class CryptographyUtil {
      */
     public byte[] rsaDecrypt(byte[] target) {
         try {
-            this.rsaDecryptionCipher.update(target);
-            return this.rsaDecryptionCipher.doFinal();
+            Cipher rsaDecryptionCipher = Cipher.getInstance(RSA_CHIPHER);
+            rsaDecryptionCipher.init(Cipher.DECRYPT_MODE, privateKey);
+            rsaDecryptionCipher.update(target);
+            return rsaDecryptionCipher.doFinal();
         } catch (Exception e) {
             logger.error(
                     () -> "Fail to decrypt data with rsa private key because of exception. Target data:\n{}\n"
