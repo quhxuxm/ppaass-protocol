@@ -26,8 +26,30 @@ public class CryptographyUtil {
     private static final String AES_CIPHER = "AES/ECB/PKCS5Padding";
     private static final String BLOWFISH_CIPHER = "Blowfish/ECB/PKCS5Padding";
     public static final CryptographyUtil INSTANCE = new CryptographyUtil();
+    private Cipher rsaEncryptionCipher;
+    private Cipher rsaDecryptionCipher;
 
     private CryptographyUtil() {
+    }
+
+    public void init(byte[] rsaPublicKey, byte[] rsaPrivateKey) {
+        try {
+            X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(rsaPublicKey);
+            KeyFactory rsaEncryptionCipherKeyFactory = KeyFactory.getInstance(ALGORITHM_RSA);
+            PublicKey publicKey = rsaEncryptionCipherKeyFactory.generatePublic(publicKeySpec);
+            this.rsaEncryptionCipher = Cipher.getInstance(RSA_CHIPHER);
+            this.rsaEncryptionCipher.init(Cipher.ENCRYPT_MODE, publicKey);
+            PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(rsaPrivateKey);
+            KeyFactory rsaDecryptionCipherKeyFactory = KeyFactory.getInstance(ALGORITHM_RSA);
+            PrivateKey privateKey = rsaDecryptionCipherKeyFactory.generatePrivate(privateKeySpec);
+            this.rsaDecryptionCipher = Cipher.getInstance(RSA_CHIPHER);
+            this.rsaDecryptionCipher.init(Cipher.DECRYPT_MODE, privateKey);
+        } catch (Exception e) {
+            logger.error(() ->
+                            "Fail to init cryptography util because of exception.",
+                    () -> new Object[]{e});
+            throw new PpaassException(e);
+        }
     }
 
     /**
@@ -127,24 +149,17 @@ public class CryptographyUtil {
     /**
      * Do RSA encryption with public key.
      *
-     * @param target         Target data to do encrypt.
-     * @param publicKeyBytes The public key.
+     * @param target Target data to do encrypt.
      * @return The encrypt result
      */
-    public byte[] rsaEncrypt(byte[] target, byte[] publicKeyBytes) {
+    public byte[] rsaEncrypt(byte[] target) {
         try {
-            X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);
-            KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM_RSA);
-            PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
-            Cipher cipher = Cipher.getInstance(RSA_CHIPHER);
-            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-            cipher.update(target);
-            return cipher.doFinal();
+            this.rsaEncryptionCipher.update(target);
+            return this.rsaEncryptionCipher.doFinal();
         } catch (Exception e) {
             logger.error(
-                    () -> "Fail to encrypt data with rsa public key because of exception. Target data: \n{}\nRSA public key: \n{}\n",
-                    () -> new Object[]{ByteBufUtil.prettyHexDump(Unpooled.wrappedBuffer(target)),
-                            ByteBufUtil.prettyHexDump(Unpooled.wrappedBuffer(publicKeyBytes)), e});
+                    () -> "Fail to encrypt data with rsa public key because of exception. Target data: \n{}\n",
+                    () -> new Object[]{ByteBufUtil.prettyHexDump(Unpooled.wrappedBuffer(target)), e});
             throw new PpaassException("Fail to encrypt data with rsa public key because of exception.", e);
         }
     }
@@ -152,25 +167,18 @@ public class CryptographyUtil {
     /**
      * Do RSA decryption with private key.
      *
-     * @param target          Target data to do decrypt.
-     * @param privateKeyBytes The private key.
+     * @param target Target data to do decrypt.
      * @return The decrypt result
      */
-    public byte[] rsaDecrypt(byte[] target, byte[] privateKeyBytes) {
+    public byte[] rsaDecrypt(byte[] target) {
         try {
-            PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
-            KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM_RSA);
-            PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
-            Cipher cipher = Cipher.getInstance(RSA_CHIPHER);
-            cipher.init(Cipher.DECRYPT_MODE, privateKey);
-            cipher.update(target);
-            return cipher.doFinal();
+            this.rsaDecryptionCipher.update(target);
+            return this.rsaDecryptionCipher.doFinal();
         } catch (Exception e) {
             logger.error(
-                    () -> "Fail to decrypt data with rsa private key because of exception. Target data:\n{}\nRSA private key:\n{}\n"
+                    () -> "Fail to decrypt data with rsa private key because of exception. Target data:\n{}\n"
                     ,
-                    () -> new Object[]{ByteBufUtil.prettyHexDump(Unpooled.wrappedBuffer(target)),
-                            ByteBufUtil.prettyHexDump(Unpooled.wrappedBuffer(privateKeyBytes)), e});
+                    () -> new Object[]{ByteBufUtil.prettyHexDump(Unpooled.wrappedBuffer(target)), e});
             throw new PpaassException("Fail to decrypt data with rsa private key because of exception.", e);
         }
     }

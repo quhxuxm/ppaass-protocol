@@ -362,17 +362,14 @@ public class MessageCodec {
      * Encode a message to byte buffer.
      *
      * @param message   The message to encode.
-     * @param publicKey The public key base64
      * @param output    The output byte buffer
      */
     public <T extends MessageBodyType> void encodeAgentMessage(AgentMessage message,
-                                                               byte[] publicKey,
                                                                ByteBuf output) {
         output.writeBytes(MAGIC_CODE);
         byte[] originalMessageBodyEncryptionToken = message.getEncryptionToken();
         byte[] encryptedMessageBodyEncryptionToken =
-                CryptographyUtil.INSTANCE.rsaEncrypt(originalMessageBodyEncryptionToken,
-                        publicKey);
+                CryptographyUtil.INSTANCE.rsaEncrypt(originalMessageBodyEncryptionToken);
         output.writeInt(encryptedMessageBodyEncryptionToken.length);
         output.writeBytes(encryptedMessageBodyEncryptionToken);
         output.writeByte(message.getEncryptionType().value());
@@ -386,17 +383,14 @@ public class MessageCodec {
      * Encode a message to byte buffer.
      *
      * @param message   The message to encode.
-     * @param publicKey The public key base64
      * @param output    The output byte buffer
      */
     public <T extends MessageBodyType> void encodeProxyMessage(ProxyMessage message,
-                                                               byte[] publicKey,
                                                                ByteBuf output) {
         output.writeBytes(MAGIC_CODE);
         byte[] originalMessageBodyEncryptionToken = message.getEncryptionToken();
         byte[] encryptedMessageBodyEncryptionToken =
-                CryptographyUtil.INSTANCE.rsaEncrypt(originalMessageBodyEncryptionToken,
-                        publicKey);
+                CryptographyUtil.INSTANCE.rsaEncrypt(originalMessageBodyEncryptionToken);
         output.writeInt(encryptedMessageBodyEncryptionToken.length);
         output.writeBytes(encryptedMessageBodyEncryptionToken);
         output.writeByte(message.getEncryptionType().value());
@@ -410,11 +404,9 @@ public class MessageCodec {
      * Decode agent message from input byte buffer.
      *
      * @param input           The input byte buffer.
-     * @param proxyPrivateKey The proxy private key
      * @return The agent message
      */
-    public AgentMessage decodeAgentMessage(ByteBuf input,
-                                           byte[] proxyPrivateKey) {
+    public AgentMessage decodeAgentMessage(ByteBuf input) {
         ByteBuf magicCodeByteBuf = input.readBytes(MAGIC_CODE.length);
         if (magicCodeByteBuf.compareTo(Unpooled.wrappedBuffer(MAGIC_CODE)) != 0) {
             logger.error(
@@ -427,8 +419,7 @@ public class MessageCodec {
         byte[] encryptedMessageBodyEncryptionToken = new byte[encryptedMessageBodyEncryptionTokenLength];
         input.readBytes(encryptedMessageBodyEncryptionToken);
         byte[] messageBodyEncryptionToken =
-                CryptographyUtil.INSTANCE.rsaDecrypt(encryptedMessageBodyEncryptionToken,
-                        proxyPrivateKey);
+                CryptographyUtil.INSTANCE.rsaDecrypt(encryptedMessageBodyEncryptionToken);
         EncryptionType messageBodyEncryptionType = parseEncryptionType(input.readByte());
         if (messageBodyEncryptionType == null) {
             throw new PpaassException(
@@ -448,11 +439,9 @@ public class MessageCodec {
      * Decode proxy message from input byte buffer.
      *
      * @param input           The input byte buffer.
-     * @param agentPrivateKey The agent private key
      * @return The proxy message
      */
-    public ProxyMessage decodeProxyMessage(ByteBuf input,
-                                           byte[] agentPrivateKey) {
+    public ProxyMessage decodeProxyMessage(ByteBuf input) {
         ByteBuf magicCodeByteBuf = input.readBytes(MAGIC_CODE.length);
         if (magicCodeByteBuf.compareTo(Unpooled.wrappedBuffer(MAGIC_CODE)) != 0) {
             logger.error(
@@ -466,8 +455,7 @@ public class MessageCodec {
         byte[] encryptedMessageBodyEncryptionToken = new byte[encryptedMessageBodyEncryptionTokenLength];
         input.readBytes(encryptedMessageBodyEncryptionToken);
         byte[] messageBodyEncryptionToken =
-                CryptographyUtil.INSTANCE.rsaDecrypt(encryptedMessageBodyEncryptionToken,
-                        agentPrivateKey);
+                CryptographyUtil.INSTANCE.rsaDecrypt(encryptedMessageBodyEncryptionToken);
         EncryptionType messageBodyEncryptionType = parseEncryptionType(input.readByte());
         if (messageBodyEncryptionType == null) {
             throw new PpaassException(
