@@ -11,19 +11,13 @@
     <artifactId>base</artifactId>
     <dependencies>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.ppaass.common</groupId>
-            <artifactId>util</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.ppaass.common</groupId>
-            <artifactId>log</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

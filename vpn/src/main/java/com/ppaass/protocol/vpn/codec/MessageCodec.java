@@ -1,20 +1,19 @@
 package com.ppaass.protocol.vpn.codec;
 
-import com.ppaass.common.exception.PpaassException;
-import com.ppaass.common.log.IPpaassLogger;
-import com.ppaass.common.log.PpaassLoggerFactory;
 import com.ppaass.protocol.vpn.cryptography.CryptographyUtil;
 import com.ppaass.protocol.vpn.message.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import io.netty.util.ReferenceCountUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
 
 public class MessageCodec {
     private static final byte[] MAGIC_CODE = "__PPAASS__".getBytes(StandardCharsets.UTF_8);
-    private static final IPpaassLogger logger = PpaassLoggerFactory.INSTANCE.getLogger();
+    private static final Logger logger = LoggerFactory.getLogger(MessageCodec.class);
     public static final MessageCodec INSTANCE = new MessageCodec();
 
     private MessageCodec() {
@@ -58,7 +57,7 @@ public class MessageCodec {
                 return CryptographyUtil.INSTANCE.blowfishEncrypt(messageBodyEncryptionToken,
                         messageBodyByteArrayBeforeEncrypt);
             default:
-                throw new PpaassException("Unsupported encryption type. ");
+                throw new IllegalArgumentException("Unsupported encryption type. ");
         }
     }
 
@@ -73,7 +72,7 @@ public class MessageCodec {
                 return CryptographyUtil.INSTANCE.blowfishDecrypt(messageBodyEncryptionToken,
                         messageBodyByteArrayBeforeDecrypt);
             default:
-                throw new PpaassException("Unsupported encryption type. ");
+                throw new IllegalArgumentException("Unsupported encryption type. ");
         }
     }
 
@@ -361,8 +360,8 @@ public class MessageCodec {
     /**
      * Encode a message to byte buffer.
      *
-     * @param message   The message to encode.
-     * @param output    The output byte buffer
+     * @param message The message to encode.
+     * @param output  The output byte buffer
      */
     public <T extends MessageBodyType> void encodeAgentMessage(AgentMessage message,
                                                                ByteBuf output) {
@@ -382,8 +381,8 @@ public class MessageCodec {
     /**
      * Encode a message to byte buffer.
      *
-     * @param message   The message to encode.
-     * @param output    The output byte buffer
+     * @param message The message to encode.
+     * @param output  The output byte buffer
      */
     public <T extends MessageBodyType> void encodeProxyMessage(ProxyMessage message,
                                                                ByteBuf output) {
@@ -403,16 +402,16 @@ public class MessageCodec {
     /**
      * Decode agent message from input byte buffer.
      *
-     * @param input           The input byte buffer.
+     * @param input The input byte buffer.
      * @return The agent message
      */
     public AgentMessage decodeAgentMessage(ByteBuf input) {
         ByteBuf magicCodeByteBuf = input.readBytes(MAGIC_CODE.length);
         if (magicCodeByteBuf.compareTo(Unpooled.wrappedBuffer(MAGIC_CODE)) != 0) {
             logger.error(
-                    () -> "Incoming agent message is not follow Ppaass protocol, incoming message is:\n{}\n"
-                    , () -> new Object[]{ByteBufUtil.prettyHexDump(input)});
-            throw new PpaassException("Incoming message is not follow Ppaass protocol.");
+                    "Incoming agent message is not follow Ppaass protocol, incoming message is:\n{}\n"
+                    , ByteBufUtil.prettyHexDump(input));
+            throw new IllegalStateException("Incoming message is not follow Ppaass protocol.");
         }
         ReferenceCountUtil.release(magicCodeByteBuf);
         int encryptedMessageBodyEncryptionTokenLength = input.readInt();
@@ -422,7 +421,7 @@ public class MessageCodec {
                 CryptographyUtil.INSTANCE.rsaDecrypt(encryptedMessageBodyEncryptionToken);
         EncryptionType messageBodyEncryptionType = parseEncryptionType(input.readByte());
         if (messageBodyEncryptionType == null) {
-            throw new PpaassException(
+            throw new IllegalStateException(
                     "Can not parse encryption type from the message.");
         }
         byte[] messageBodyByteArray = new byte[input.readableBytes()];
@@ -438,17 +437,17 @@ public class MessageCodec {
     /**
      * Decode proxy message from input byte buffer.
      *
-     * @param input           The input byte buffer.
+     * @param input The input byte buffer.
      * @return The proxy message
      */
     public ProxyMessage decodeProxyMessage(ByteBuf input) {
         ByteBuf magicCodeByteBuf = input.readBytes(MAGIC_CODE.length);
         if (magicCodeByteBuf.compareTo(Unpooled.wrappedBuffer(MAGIC_CODE)) != 0) {
             logger.error(
-                    () -> "Incoming proxy message is not follow Ppaass protocol, incoming message is:\n${}\n",
-                    () -> new Object[]{ByteBufUtil.prettyHexDump(input)}
+                    "Incoming proxy message is not follow Ppaass protocol, incoming message is:\n${}\n",
+                    ByteBufUtil.prettyHexDump(input)
             );
-            throw new PpaassException("Incoming message is not follow Ppaass protocol.");
+            throw new IllegalStateException("Incoming message is not follow Ppaass protocol.");
         }
         ReferenceCountUtil.release(magicCodeByteBuf);
         int encryptedMessageBodyEncryptionTokenLength = input.readInt();
@@ -458,7 +457,7 @@ public class MessageCodec {
                 CryptographyUtil.INSTANCE.rsaDecrypt(encryptedMessageBodyEncryptionToken);
         EncryptionType messageBodyEncryptionType = parseEncryptionType(input.readByte());
         if (messageBodyEncryptionType == null) {
-            throw new PpaassException(
+            throw new IllegalStateException(
                     "Can not parse encryption type from the message.");
         }
         byte[] messageBodyByteArray = new byte[input.readableBytes()];

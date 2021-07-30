@@ -1,6 +1,5 @@
 package com.ppaass.protocol.base.tcp;
 
-import com.ppaass.common.exception.PpaassException;
 import com.ppaass.protocol.base.IProtocolConst;
 
 import java.nio.ByteBuffer;
@@ -46,7 +45,7 @@ public class TcpPacketReader {
                 continue;
             }
             if (tcpHeaderOptionKind == null) {
-                throw new PpaassException(
+                throw new IllegalStateException(
                         "The option kind is not exist, option kind value=" + optionKind);
             }
             int infoLengthInDefinition = tcpHeaderOptionKind.getInfoLength();
@@ -66,7 +65,7 @@ public class TcpPacketReader {
         tcpPacketBuilder.data(data);
         TcpPacket result = tcpPacketBuilder.build();
         if (result.getHeader().getOffset() != offset) {
-            throw new PpaassException(
+            throw new IllegalStateException(
                     "The offset in the input data do not match, result.offest=" + result.getHeader().getOffset() +
                             ", offset=" + offset);
         }
