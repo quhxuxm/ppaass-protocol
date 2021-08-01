@@ -28,11 +28,8 @@ public enum ProxyMessageBodyType implements MessageBodyType {
     /**
      * Fail on transfer UDP data
      */
-    UDP_DATA_FAIL(7),
-    /**
-     * DNS answer
-     */
-    DNS_ANSWER(8);
+    UDP_DATA_FAIL(7);
+
     private final int value;
 
     ProxyMessageBodyType(int value) {

@@ -12,11 +12,7 @@ public enum AgentMessageBodyType implements MessageBodyType {
     /**
      * Sending a UDP data
      */
-    UDP_DATA(3),
-    /**
-     * Sending a DNS query
-     */
-    DNS_QUERY(4);
+    UDP_DATA(3);
     private final int value;
 
     AgentMessageBodyType(int value) {
