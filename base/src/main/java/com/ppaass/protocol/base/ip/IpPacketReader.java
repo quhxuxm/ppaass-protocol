@@ -52,6 +52,9 @@ public class IpPacketReader {
         ipV4HeaderBuilder.fragmentOffset(flagsAndOffset & 0x1FFF);
         ipV4HeaderBuilder.ttl(byteBuffer.get() & 0xFF);
         IpDataProtocol protocol = IpDataProtocol.parse(byteBuffer.get() & 0xFF);
+        if (protocol == null) {
+            throw new IllegalStateException("No protocol found in ip packet.");
+        }
         ipV4HeaderBuilder.protocol(protocol);
         ipV4HeaderBuilder.checksum(byteBuffer.getShort() & 0xFFFF);
         byte[] sourceAddress = new byte[4];
