@@ -7,8 +7,10 @@ use std::net::SocketAddr;
 /// agent and proxy
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, Display)]
 pub enum NetAddress {
+    /// The ip address, including support for v4 and v6
     #[display(fmt = "{:?}", _0)]
     Ip(SocketAddr),
+    /// The domain name address
     #[display(fmt = "{}:{}", host, port)]
     Domain { host: String, port: u16 },
 }

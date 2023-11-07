@@ -8,12 +8,17 @@ use crate::{error::ProtocolError, Encryption};
 
 use self::payload::ProxyMessagePayload;
 
+/// The proxy message
 #[non_exhaustive]
 #[derive(Serialize, Deserialize, Debug, Constructor)]
 pub struct ProxyMessage {
-    pub uniqueue_hash: Bytes,
+    /// The unique hash to idenfiy this message
+    pub unique_hash: Bytes,
+    /// The user token
     pub user_token: Bytes,
+    /// The encryption of the payload used for this message
     pub encryption: Encryption,
+    /// The message payload
     pub payload: ProxyMessagePayload,
 }
 

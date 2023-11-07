@@ -7,12 +7,17 @@ use serde_derive::{Deserialize, Serialize};
 
 use self::payload::AgentMessagePayload;
 
+/// The agent message
 #[non_exhaustive]
 #[derive(Serialize, Deserialize, Debug, Constructor)]
 pub struct AgentMessage {
-    pub uniqueue_hash: Bytes,
+    /// The unique hash to idenfiy this message
+    pub unique_hash: Bytes,
+    /// The user token
     pub user_token: Bytes,
+    /// The encryption of the payload used for this message
     pub encryption: Encryption,
+    /// The message payload
     pub payload: AgentMessagePayload,
 }
 
