@@ -4,7 +4,7 @@ use bytes::Bytes;
 use derive_more::Constructor;
 use serde_derive::{Deserialize, Serialize};
 
-use crate::{error::ProtocolError, Encryption};
+use crate::{error::ProtocolError, message::Encryption};
 
 pub use self::payload::ProxyMessagePayload;
 

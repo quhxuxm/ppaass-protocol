@@ -1,3 +1,2 @@
 pub mod error;
-mod message;
-pub use message::*;
+pub mod message;

@@ -1,7 +1,7 @@
 use bytes::Bytes;
 use serde_derive::{Deserialize, Serialize};
 
-use crate::NetAddress;
+use crate::message::NetAddress;
 
 /// The tcp payload in agent message
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]

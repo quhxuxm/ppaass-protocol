@@ -1,6 +1,6 @@
 mod payload;
 
-use crate::{error::ProtocolError, Encryption};
+use crate::{error::ProtocolError, message::Encryption};
 use bytes::Bytes;
 use derive_more::Constructor;
 use serde_derive::{Deserialize, Serialize};
