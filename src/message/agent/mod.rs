@@ -11,8 +11,8 @@ use self::payload::AgentMessagePayload;
 #[non_exhaustive]
 #[derive(Serialize, Deserialize, Debug, Constructor)]
 pub struct AgentMessage {
-    /// The unique hash to idenfiy this message
-    pub unique_hash: Bytes,
+    /// The unique id to idenfiy this message
+    pub unique_id: String,
     /// The user token
     pub user_token: Bytes,
     /// The encryption of the payload used for this message
