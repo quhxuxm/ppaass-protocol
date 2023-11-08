@@ -5,7 +5,7 @@ use bytes::Bytes;
 use derive_more::Constructor;
 use serde_derive::{Deserialize, Serialize};
 
-use self::payload::AgentMessagePayload;
+pub use self::payload::AgentMessagePayload;
 
 /// The agent message
 #[non_exhaustive]

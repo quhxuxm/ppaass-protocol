@@ -6,7 +6,7 @@ use serde_derive::{Deserialize, Serialize};
 
 use crate::{error::ProtocolError, Encryption};
 
-use self::payload::ProxyMessagePayload;
+pub use self::payload::ProxyMessagePayload;
 
 /// The proxy message
 #[non_exhaustive]
