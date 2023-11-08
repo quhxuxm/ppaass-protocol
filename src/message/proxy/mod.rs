@@ -15,11 +15,11 @@ pub struct ProxyMessage {
     /// The unique id to idenfiy this message
     pub unique_id: String,
     /// The user token
-    pub user_token: Bytes,
+    pub user_token: String,
     /// The encryption of the payload used for this message
     pub encryption: Encryption,
     /// The message payload
-    pub payload: ProxyMessagePayload,
+    pub payload: Bytes,
 }
 
 impl TryFrom<Bytes> for ProxyMessage {
