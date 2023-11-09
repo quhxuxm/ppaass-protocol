@@ -12,7 +12,7 @@ use bytes::Bytes;
 use derive_more::Constructor;
 use serde_derive::{Deserialize, Serialize};
 
-use crate::{error::ProtocolError, message::Encryption};
+use crate::error::ProtocolError;
 
 /// The proxy message
 #[non_exhaustive]
