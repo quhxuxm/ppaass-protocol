@@ -1,7 +1,7 @@
 use bytes::Bytes;
 use serde_derive::{Deserialize, Serialize};
 
-use crate::message::NetAddress;
+use crate::{error::ProtocolError, message::NetAddress};
 
 /// The tcp payload in agent message
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
@@ -27,4 +27,22 @@ pub enum AgentMessagePayload {
         data: Bytes,
         expect_response: bool,
     },
+}
+
+impl TryFrom<Bytes> for AgentMessagePayload {
+    type Error = ProtocolError;
+
+    fn try_from(value: Bytes) -> Result<Self, Self::Error> {
+        bincode::deserialize(&value).map_err(ProtocolError::Deserialize)
+    }
+}
+
+impl TryFrom<AgentMessagePayload> for Bytes {
+    type Error = ProtocolError;
+
+    fn try_from(value: AgentMessagePayload) -> Result<Self, Self::Error> {
+        bincode::serialize(&value)
+            .map(Bytes::from)
+            .map_err(ProtocolError::Serialize)
+    }
 }
