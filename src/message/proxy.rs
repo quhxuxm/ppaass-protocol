@@ -15,20 +15,15 @@ pub enum ProxyTcpPayload {
     Data(Bytes),
 }
 
-/// The proxy message payload
-#[derive(Serialize, Deserialize, Debug)]
-pub enum ProxyMessagePayload {
-    /// Tcp payload
-    Tcp(ProxyTcpPayload),
-    /// Udp payload
-    Udp {
-        src_address: NetAddress,
-        dst_address: NetAddress,
-        data: Bytes,
-    },
+/// The udp payload in agent message
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
+pub struct ProxyUdpPayload {
+    src_address: NetAddress,
+    dst_address: NetAddress,
+    data: Bytes,
 }
 
-impl TryFrom<Bytes> for ProxyMessagePayload {
+impl TryFrom<Bytes> for ProxyTcpPayload {
     type Error = ProtocolError;
 
     fn try_from(value: Bytes) -> Result<Self, Self::Error> {
@@ -36,10 +31,28 @@ impl TryFrom<Bytes> for ProxyMessagePayload {
     }
 }
 
-impl TryFrom<ProxyMessagePayload> for Bytes {
+impl TryFrom<ProxyTcpPayload> for Bytes {
     type Error = ProtocolError;
 
-    fn try_from(value: ProxyMessagePayload) -> Result<Self, Self::Error> {
+    fn try_from(value: ProxyTcpPayload) -> Result<Self, Self::Error> {
+        bincode::serialize(&value)
+            .map(Bytes::from)
+            .map_err(ProtocolError::Serialize)
+    }
+}
+
+impl TryFrom<Bytes> for ProxyUdpPayload {
+    type Error = ProtocolError;
+
+    fn try_from(value: Bytes) -> Result<Self, Self::Error> {
+        bincode::deserialize(&value).map_err(ProtocolError::Deserialize)
+    }
+}
+
+impl TryFrom<ProxyUdpPayload> for Bytes {
+    type Error = ProtocolError;
+
+    fn try_from(value: ProxyUdpPayload) -> Result<Self, Self::Error> {
         bincode::serialize(&value)
             .map(Bytes::from)
             .map_err(ProtocolError::Serialize)

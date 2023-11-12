@@ -14,6 +14,12 @@ use serde_derive::{Deserialize, Serialize};
 
 use crate::error::ProtocolError;
 
+#[derive(Serialize, Deserialize, Debug)]
+pub enum PayloadType {
+    Tcp,
+    Udp,
+}
+
 /// The proxy message
 #[non_exhaustive]
 #[derive(Serialize, Deserialize, Debug, Constructor)]
@@ -24,6 +30,8 @@ pub struct WrapperMessage {
     pub user_token: String,
     /// The encryption of the payload used for this message
     pub encryption: Encryption,
+    /// The type of the payload of this message
+    pub payload_type: PayloadType,
     /// The message payload
     pub payload: Bytes,
 }
