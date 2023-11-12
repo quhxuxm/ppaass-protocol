@@ -7,20 +7,33 @@ use crate::{error::ProtocolError, message::NetAddress};
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
 pub enum AgentTcpPayload {
     /// Tcp flow will do connect first
-    Connect {
+    InitRequest {
+        /// The source address
         src_address: NetAddress,
+        /// The destination address
         dst_address: NetAddress,
     },
     /// After connect the relay process will happen
-    Data(Bytes),
+    Data {
+        /// The connection id between agent and proxy
+        connection_id: String,
+        /// The data relay from agent to proxy
+        data: Bytes,
+    },
 }
 
 /// The udp payload in agent message
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
 pub struct AgentUdpPayload {
+    /// The connection id between agent and proxy
+    connection_id: String,
+    /// The source address
     src_address: NetAddress,
+    /// The destination address
     dst_address: NetAddress,
+    /// The data relay from agent to proxy
     data: Bytes,
+    /// If the udp message need a response from proxy
     expect_response: bool,
 }
 
