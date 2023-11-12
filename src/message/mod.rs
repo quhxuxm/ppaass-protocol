@@ -14,7 +14,7 @@ use serde_derive::{Deserialize, Serialize};
 
 use crate::error::ProtocolError;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 pub enum PayloadType {
     Tcp,
     Udp,
