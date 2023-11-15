@@ -35,3 +35,9 @@ impl PartialEq for NetAddress {
         }
     }
 }
+
+impl From<SocketAddr> for NetAddress {
+    fn from(value: SocketAddr) -> Self {
+        NetAddress::Ip(value)
+    }
+}
