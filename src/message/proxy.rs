@@ -3,11 +3,16 @@ use serde_derive::{Deserialize, Serialize};
 
 use crate::{error::ProtocolError, message::NetAddress};
 
-/// The tcp payload in proxy message
+/// The tcp payload init response failure reason
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
-pub enum ProxyTcpPayload {
-    /// Tcp flow will do connect first
-    InitResponse {
+pub enum ProxyTcpInitResponseFailureReason {
+    Other,
+}
+
+/// The tcp payload init response status
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
+pub enum ProxyTcpInitResponseStatus {
+    Success {
         /// The connection id between agent and proxy
         connection_id: String,
         /// The source address
@@ -15,6 +20,14 @@ pub enum ProxyTcpPayload {
         /// The destination address
         dst_address: NetAddress,
     },
+    Failure(ProxyTcpInitResponseFailureReason),
+}
+
+/// The tcp payload in proxy message
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
+pub enum ProxyTcpPayload {
+    /// Tcp flow will do connect first
+    InitResponse(ProxyTcpInitResponseStatus),
     /// After connect the relay process will happen
     Data {
         /// The connection id between agent and proxy
