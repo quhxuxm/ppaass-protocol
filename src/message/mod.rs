@@ -11,6 +11,7 @@ pub use proxy::*;
 pub use unwrapped::*;
 
 use bytes::Bytes;
+use derive_more::Constructor;
 use serde_derive::{Deserialize, Serialize};
 
 use crate::error::ProtocolError;
@@ -23,7 +24,7 @@ pub enum PayloadType {
 
 /// The proxy message
 #[non_exhaustive]
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Constructor)]
 pub struct WrapperMessage {
     /// The unique id to idenfiy this message
     pub unique_id: String,
