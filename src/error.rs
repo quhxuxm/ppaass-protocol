@@ -6,4 +6,6 @@ pub enum ProtocolError {
     Serialize(#[source] bincode::Error),
     #[error("Fail to deserialize message because of error: {0:?}")]
     Deserialize(#[source] bincode::Error),
+    #[error("Protocol error happeb because of error: {0}")]
+    Other(String),
 }

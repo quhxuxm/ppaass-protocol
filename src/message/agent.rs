@@ -1,5 +1,4 @@
 use bytes::Bytes;
-use derive_more::Constructor;
 use serde_derive::{Deserialize, Serialize};
 
 use crate::{error::ProtocolError, message::NetAddress};
@@ -24,18 +23,18 @@ pub enum AgentTcpPayload {
 }
 
 /// The udp payload in agent message
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Constructor)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
 pub struct AgentUdpPayload {
     /// The connection id between agent and proxy
-    connection_id: String,
+    pub connection_id: String,
     /// The source address
-    src_address: NetAddress,
+    pub src_address: NetAddress,
     /// The destination address
-    dst_address: NetAddress,
+    pub dst_address: NetAddress,
     /// The data relay from agent to proxy
-    data: Bytes,
+    pub data: Bytes,
     /// If the udp message need a response from proxy
-    expect_response: bool,
+    pub expect_response: bool,
 }
 
 impl TryFrom<Bytes> for AgentTcpPayload {

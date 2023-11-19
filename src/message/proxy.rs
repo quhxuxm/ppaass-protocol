@@ -1,6 +1,6 @@
 use crate::{error::ProtocolError, message::NetAddress};
 use bytes::Bytes;
-use derive_more::Constructor;
+
 use serde_derive::{Deserialize, Serialize};
 
 /// The tcp payload init response failure reason
@@ -20,7 +20,16 @@ pub enum ProxyTcpInitResponseStatus {
         /// The destination address
         dst_address: NetAddress,
     },
-    Failure(ProxyTcpInitResponseFailureReason),
+    Failure {
+        /// The connection id between agent and proxy
+        connection_id: String,
+        /// The source address
+        src_address: NetAddress,
+        /// The destination address
+        dst_address: NetAddress,
+        /// The reason of failure
+        reason: ProxyTcpInitResponseFailureReason,
+    },
 }
 
 /// The tcp payload in proxy message
@@ -38,16 +47,16 @@ pub enum ProxyTcpPayload {
 }
 
 /// The udp payload in agent message
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Constructor)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
 pub struct ProxyUdpPayload {
     /// The connection id between agent and proxy
-    connection_id: String,
+    pub connection_id: String,
     /// The source address
-    src_address: NetAddress,
+    pub src_address: NetAddress,
     /// The destination address
-    dst_address: NetAddress,
+    pub dst_address: NetAddress,
     /// The data relay from proxy to agent
-    data: Bytes,
+    pub data: Bytes,
 }
 
 impl TryFrom<Bytes> for ProxyTcpPayload {
