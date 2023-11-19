@@ -2,7 +2,8 @@ use bytes::Bytes;
 use error::ProtocolError;
 use message::{
     AgentTcpPayload, AgentUdpPayload, NetAddress, PayloadType, ProxyTcpInitResponseFailureReason,
-    ProxyTcpInitResponseStatus, ProxyTcpPayload, ProxyUdpPayload, WrapperMessage,
+    ProxyTcpInitResponseStatus, ProxyTcpPayload, ProxyUdpPayload, UnwrappedAgentTcpPayload,
+    UnwrappedAgentUdpPayload, UnwrappedProxyTcpPayload, UnwrappedProxyUdpPayload, WrapperMessage,
 };
 use uuid::Uuid;
 
@@ -165,62 +166,98 @@ pub fn new_proxy_udp_data(
     })
 }
 
-pub fn unwrap_agent_tcp_payload(message: WrapperMessage) -> Result<AgentTcpPayload, ProtocolError> {
+pub fn unwrap_agent_tcp_payload(
+    message: WrapperMessage,
+) -> Result<UnwrappedAgentTcpPayload, ProtocolError> {
     let WrapperMessage {
         unique_id,
         user_token,
         payload_type,
         payload,
+        encryption,
         ..
     } = message;
     if payload_type != PayloadType::Tcp {
         return Err(ProtocolError::Other(format!("Fail to parse wrapper message [{unique_id}] for user [{user_token}] to agent tcp payload because of the payload type is not TCP: {payload_type:?}")));
     }
-    let payload: AgentTcpPayload = payload.try_into()?;
-    Ok(payload)
+    let agent_tcp_payload: AgentTcpPayload = payload.try_into()?;
+    Ok(UnwrappedAgentTcpPayload {
+        unique_id,
+        user_token,
+        encryption,
+        payload_type,
+        payload: agent_tcp_payload,
+    })
 }
 
-pub fn unwrap_agent_udp_payload(message: WrapperMessage) -> Result<AgentUdpPayload, ProtocolError> {
+pub fn unwrap_agent_udp_payload(
+    message: WrapperMessage,
+) -> Result<UnwrappedAgentUdpPayload, ProtocolError> {
     let WrapperMessage {
         unique_id,
         user_token,
         payload_type,
         payload,
+        encryption,
         ..
     } = message;
     if payload_type != PayloadType::Udp {
         return Err(ProtocolError::Other(format!("Fail to parse wrapper message [{unique_id}] for user [{user_token}] to agent tcp payload because of the payload type is not UDP: {payload_type:?}")));
     }
-    let payload: AgentUdpPayload = payload.try_into()?;
-    Ok(payload)
+    let agent_udp_payload: AgentUdpPayload = payload.try_into()?;
+    Ok(UnwrappedAgentUdpPayload {
+        unique_id,
+        user_token,
+        encryption,
+        payload_type,
+        payload: agent_udp_payload,
+    })
 }
 
-pub fn unwrap_proxy_tcp_payload(message: WrapperMessage) -> Result<ProxyTcpPayload, ProtocolError> {
+pub fn unwrap_proxy_tcp_payload(
+    message: WrapperMessage,
+) -> Result<UnwrappedProxyTcpPayload, ProtocolError> {
     let WrapperMessage {
         unique_id,
         user_token,
         payload_type,
         payload,
+        encryption,
         ..
     } = message;
     if payload_type != PayloadType::Tcp {
         return Err(ProtocolError::Other(format!("Fail to parse wrapper message [{unique_id}] for user [{user_token}] to proxy tcp payload because of the payload type is not TCP: {payload_type:?}")));
     }
-    let payload: ProxyTcpPayload = payload.try_into()?;
-    Ok(payload)
+    let proxy_tcp_payload: ProxyTcpPayload = payload.try_into()?;
+    Ok(UnwrappedProxyTcpPayload {
+        unique_id,
+        user_token,
+        encryption,
+        payload_type,
+        payload: proxy_tcp_payload,
+    })
 }
 
-pub fn unwrap_proxy_udp_payload(message: WrapperMessage) -> Result<ProxyUdpPayload, ProtocolError> {
+pub fn unwrap_proxy_udp_payload(
+    message: WrapperMessage,
+) -> Result<UnwrappedProxyUdpPayload, ProtocolError> {
     let WrapperMessage {
         unique_id,
         user_token,
         payload_type,
         payload,
+        encryption,
         ..
     } = message;
     if payload_type != PayloadType::Udp {
         return Err(ProtocolError::Other(format!("Fail to parse wrapper message [{unique_id}] for user [{user_token}] to proxy tcp payload because of the payload type is not UDP: {payload_type:?}")));
     }
-    let payload: ProxyUdpPayload = payload.try_into()?;
-    Ok(payload)
+    let proxy_udp_payload: ProxyUdpPayload = payload.try_into()?;
+    Ok(UnwrappedProxyUdpPayload {
+        unique_id,
+        user_token,
+        encryption,
+        payload_type,
+        payload: proxy_udp_payload,
+    })
 }

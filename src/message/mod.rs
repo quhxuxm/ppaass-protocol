@@ -2,11 +2,13 @@ mod address;
 mod agent;
 mod encryption;
 mod proxy;
+mod unwrapped;
 
 pub use address::*;
 pub use agent::*;
 pub use encryption::*;
 pub use proxy::*;
+pub use unwrapped::*;
 
 use bytes::Bytes;
 use serde_derive::{Deserialize, Serialize};
