@@ -44,6 +44,11 @@ pub enum ProxyTcpPayload {
         /// The data relay from proxy to agent
         data: Bytes,
     },
+    /// Tcp flow will close after this response
+    CloseResponse {
+        /// The connection id between agent and proxy
+        connection_id: String,
+    },
 }
 
 /// The udp payload in agent message
