@@ -56,6 +56,21 @@ pub fn new_agent_tcp_data(
     })
 }
 
+pub fn new_agent_tcp_close_request(
+    user_token: String,
+    connection_id: String,
+) -> Result<WrapperMessage, ProtocolError> {
+    let payload = AgentTcpPayload::CloseRequest { connection_id };
+    let payload = payload.try_into()?;
+    Ok(WrapperMessage {
+        unique_id: Uuid::new_v4().to_string(),
+        user_token,
+        encryption: message::Encryption::Aes(random_32_bytes()),
+        payload_type: PayloadType::Tcp,
+        payload,
+    })
+}
+
 pub fn new_agent_udp_data(
     user_token: String,
     connection_id: String,
@@ -133,6 +148,21 @@ pub fn new_proxy_tcp_data(
         connection_id,
         data,
     };
+    let payload = payload.try_into()?;
+    Ok(WrapperMessage {
+        unique_id: Uuid::new_v4().to_string(),
+        user_token,
+        encryption: message::Encryption::Aes(random_32_bytes()),
+        payload_type: PayloadType::Tcp,
+        payload,
+    })
+}
+
+pub fn new_proxy_tcp_close_request(
+    user_token: String,
+    connection_id: String,
+) -> Result<WrapperMessage, ProtocolError> {
+    let payload = ProxyTcpPayload::CloseRequest { connection_id };
     let payload = payload.try_into()?;
     Ok(WrapperMessage {
         unique_id: Uuid::new_v4().to_string(),

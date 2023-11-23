@@ -45,7 +45,7 @@ pub enum ProxyTcpPayload {
         data: Bytes,
     },
     /// Tcp flow will close after this response
-    CloseResponse {
+    CloseRequest {
         /// The connection id between agent and proxy
         connection_id: String,
     },
