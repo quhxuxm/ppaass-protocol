@@ -39,13 +39,10 @@ pub fn new_agent_tcp_init_request(
 
 pub fn new_agent_tcp_data(
     user_token: String,
-    connection_id: String,
+    tunnel_id: String,
     data: Bytes,
 ) -> Result<WrapperMessage, ProtocolError> {
-    let payload = AgentTcpPayload::Data {
-        connection_id,
-        data,
-    };
+    let payload = AgentTcpPayload::Data { tunnel_id, data };
     let payload = payload.try_into()?;
     Ok(WrapperMessage {
         unique_id: Uuid::new_v4().to_string(),
@@ -58,9 +55,9 @@ pub fn new_agent_tcp_data(
 
 pub fn new_agent_tcp_close_request(
     user_token: String,
-    connection_id: String,
+    tunnel_id: String,
 ) -> Result<WrapperMessage, ProtocolError> {
-    let payload = AgentTcpPayload::CloseRequest { connection_id };
+    let payload = AgentTcpPayload::CloseRequest { tunnel_id };
     let payload = payload.try_into()?;
     Ok(WrapperMessage {
         unique_id: Uuid::new_v4().to_string(),
@@ -73,14 +70,14 @@ pub fn new_agent_tcp_close_request(
 
 pub fn new_agent_udp_data(
     user_token: String,
-    connection_id: String,
+    tunnel_id: String,
     src_address: NetAddress,
     dst_address: NetAddress,
     data: Bytes,
     expect_response: bool,
 ) -> Result<WrapperMessage, ProtocolError> {
     let payload = AgentUdpPayload {
-        connection_id,
+        tunnel_id,
         data,
         src_address,
         dst_address,
