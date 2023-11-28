@@ -26,8 +26,10 @@ pub enum PayloadType {
 #[non_exhaustive]
 #[derive(Serialize, Deserialize, Debug, Constructor)]
 pub struct WrapperMessage {
-    /// The unique id to idenfiy this message
-    pub unique_id: String,
+    /// The message id to idenfiy this message
+    pub message_id: String,
+    /// The tunnel id to idenfiy this message
+    pub tunnel_id: String,
     /// The user token
     pub user_token: String,
     /// The encryption of the payload used for this message

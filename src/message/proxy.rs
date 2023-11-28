@@ -13,16 +13,12 @@ pub enum ProxyTcpInitResponseFailureReason {
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
 pub enum ProxyTcpInitResponseStatus {
     Success {
-        /// The tunnel id between agent and proxy
-        tunnel_id: String,
         /// The source address
         src_address: NetAddress,
         /// The destination address
         dst_address: NetAddress,
     },
     Failure {
-        /// The tunnel id between agent and proxy
-        tunnel_id: String,
         /// The source address
         src_address: NetAddress,
         /// The destination address
@@ -39,23 +35,16 @@ pub enum ProxyTcpPayload {
     InitResponse(ProxyTcpInitResponseStatus),
     /// After connect the relay process will happen
     Data {
-        /// The tunnel id between agent and proxy
-        tunnel_id: String,
         /// The data relay from proxy to agent
         data: Bytes,
     },
     /// Tcp flow will close after this response
-    CloseRequest {
-        /// The tunnel id between agent and proxy
-        tunnel_id: String,
-    },
+    CloseRequest,
 }
 
 /// The udp payload in agent message
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
 pub struct ProxyUdpPayload {
-    /// The tunnel id between agent and proxy
-    pub tunnel_id: String,
     /// The source address
     pub src_address: NetAddress,
     /// The destination address

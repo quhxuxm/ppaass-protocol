@@ -15,23 +15,16 @@ pub enum AgentTcpPayload {
     },
     /// After connect the relay process will happen
     Data {
-        /// The tunnel id between agent and proxy
-        tunnel_id: String,
         /// The data relay from agent to proxy
         data: Bytes,
     },
     /// Tcp flow will close after this request
-    CloseRequest {
-        /// The tunnel id between agent and proxy
-        tunnel_id: String,
-    },
+    CloseRequest,
 }
 
 /// The udp payload in agent message
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
 pub struct AgentUdpPayload {
-    /// The tunnel id between agent and proxy
-    pub tunnel_id: String,
     /// The source address
     pub src_address: NetAddress,
     /// The destination address

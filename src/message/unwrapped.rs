@@ -2,9 +2,11 @@ use super::{
     AgentTcpPayload, AgentUdpPayload, Encryption, PayloadType, ProxyTcpPayload, ProxyUdpPayload,
 };
 
-pub struct UnwrappedAgentTcpPayload {
-    /// The unique id to idenfiy this message
-    pub unique_id: String,
+pub struct UnwrappedAgentTcpMessage {
+    /// The tunnel id of the
+    pub tunnel_id: String,
+    /// The message id to idenfiy this message
+    pub message_id: String,
     /// The user token
     pub user_token: String,
     /// The encryption of the payload used for this message
@@ -15,9 +17,11 @@ pub struct UnwrappedAgentTcpPayload {
     pub payload: AgentTcpPayload,
 }
 
-pub struct UnwrappedAgentUdpPayload {
-    /// The unique id to idenfiy this message
-    pub unique_id: String,
+pub struct UnwrappedAgentUdpMessage {
+    /// The tunnel id of the
+    pub tunnel_id: String,
+    /// The message id to idenfiy this message
+    pub message_id: String,
     /// The user token
     pub user_token: String,
     /// The encryption of the payload used for this message
@@ -28,9 +32,11 @@ pub struct UnwrappedAgentUdpPayload {
     pub payload: AgentUdpPayload,
 }
 
-pub struct UnwrappedProxyTcpPayload {
-    /// The unique id to idenfiy this message
-    pub unique_id: String,
+pub struct UnwrappedProxyTcpMessage {
+    /// The tunnel id of the
+    pub tunnel_id: String,
+    /// The message id to idenfiy this message
+    pub message_id: String,
     /// The user token
     pub user_token: String,
     /// The encryption of the payload used for this message
@@ -41,9 +47,11 @@ pub struct UnwrappedProxyTcpPayload {
     pub payload: ProxyTcpPayload,
 }
 
-pub struct UnwrappedProxyUdpPayload {
-    /// The unique id to idenfiy this message
-    pub unique_id: String,
+pub struct UnwrappedProxyUdpMessage {
+    /// The tunnel id of the
+    pub tunnel_id: String,
+    /// The message id to idenfiy this message
+    pub message_id: String,
     /// The user token
     pub user_token: String,
     /// The encryption of the payload used for this message
