@@ -4,8 +4,8 @@ use super::{
 
 pub struct UnwrappedAgentTcpMessage {
     /// The tunnel id of the
-    pub tunnel_id: String,
-    /// The message id to idenfiy this message
+    pub tunnel_id: Option<String>,
+    /// The message id to identify this message
     pub message_id: String,
     /// The user token
     pub user_token: String,
@@ -18,9 +18,9 @@ pub struct UnwrappedAgentTcpMessage {
 }
 
 pub struct UnwrappedAgentUdpMessage {
-    /// The tunnel id of the
-    pub tunnel_id: String,
-    /// The message id to idenfiy this message
+    /// The tunnel id
+    pub tunnel_id: Option<String>,
+    /// The message id to identify this message
     pub message_id: String,
     /// The user token
     pub user_token: String,
@@ -33,9 +33,9 @@ pub struct UnwrappedAgentUdpMessage {
 }
 
 pub struct UnwrappedProxyTcpMessage {
-    /// The tunnel id of the
-    pub tunnel_id: String,
-    /// The message id to idenfiy this message
+    /// The tunnel id
+    pub tunnel_id: Option<String>,
+    /// The message id to identify this message
     pub message_id: String,
     /// The user token
     pub user_token: String,
@@ -48,9 +48,9 @@ pub struct UnwrappedProxyTcpMessage {
 }
 
 pub struct UnwrappedProxyUdpMessage {
-    /// The tunnel id of the
-    pub tunnel_id: String,
-    /// The message id to idenfiy this message
+    /// The tunnel id
+    pub tunnel_id: Option<String>,
+    /// The message id to identify this message
     pub message_id: String,
     /// The user token
     pub user_token: String,

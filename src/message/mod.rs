@@ -22,14 +22,14 @@ pub enum PayloadType {
     Udp,
 }
 
-/// The proxy message
+/// The wrapper message
 #[non_exhaustive]
 #[derive(Serialize, Deserialize, Debug, Constructor)]
 pub struct WrapperMessage {
-    /// The message id to idenfiy this message
+    /// The message id to identify this message
     pub message_id: String,
-    /// The tunnel id to idenfiy this message
-    pub tunnel_id: String,
+    /// The tunnel id
+    pub tunnel_id: Option<String>,
     /// The user token
     pub user_token: String,
     /// The encryption of the payload used for this message

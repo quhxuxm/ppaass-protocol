@@ -30,7 +30,7 @@ pub fn new_agent_tcp_init_request(
     };
     let payload = payload.try_into()?;
     Ok(WrapperMessage {
-        tunnel_id,
+        tunnel_id: Some(tunnel_id),
         message_id: Uuid::new_v4().to_string(),
         user_token,
         encryption: message::Encryption::Aes(random_32_bytes()),
@@ -47,7 +47,7 @@ pub fn new_agent_tcp_data(
     let payload = AgentTcpPayload::Data { data };
     let payload = payload.try_into()?;
     Ok(WrapperMessage {
-        tunnel_id,
+        tunnel_id: Some(tunnel_id),
         message_id: Uuid::new_v4().to_string(),
         user_token,
         encryption: message::Encryption::Aes(random_32_bytes()),
@@ -63,7 +63,7 @@ pub fn new_agent_tcp_close_request(
     let payload = AgentTcpPayload::CloseRequest;
     let payload = payload.try_into()?;
     Ok(WrapperMessage {
-        tunnel_id,
+        tunnel_id: Some(tunnel_id),
         message_id: Uuid::new_v4().to_string(),
         user_token,
         encryption: message::Encryption::Aes(random_32_bytes()),
@@ -88,7 +88,7 @@ pub fn new_agent_udp_data(
     };
     let payload = payload.try_into()?;
     Ok(WrapperMessage {
-        tunnel_id,
+        tunnel_id: Some(tunnel_id),
         message_id: Uuid::new_v4().to_string(),
         user_token,
         encryption: message::Encryption::Aes(random_32_bytes()),
@@ -109,7 +109,7 @@ pub fn new_proxy_tcp_init_success_response(
     };
     let payload = ProxyTcpPayload::InitResponse(response_status).try_into()?;
     Ok(WrapperMessage {
-        tunnel_id,
+        tunnel_id: Some(tunnel_id),
         message_id: Uuid::new_v4().to_string(),
         user_token,
         encryption: message::Encryption::Aes(random_32_bytes()),
@@ -131,7 +131,7 @@ pub fn new_proxy_tcp_init_failure_response(
     };
     let payload = ProxyTcpPayload::InitResponse(response_status).try_into()?;
     Ok(WrapperMessage {
-        tunnel_id,
+        tunnel_id: Some(tunnel_id),
         message_id: Uuid::new_v4().to_string(),
         user_token,
         encryption: message::Encryption::Aes(random_32_bytes()),
@@ -148,7 +148,7 @@ pub fn new_proxy_tcp_data(
     let payload = ProxyTcpPayload::Data { data };
     let payload = payload.try_into()?;
     Ok(WrapperMessage {
-        tunnel_id,
+        tunnel_id: Some(tunnel_id),
         message_id: Uuid::new_v4().to_string(),
         user_token,
         encryption: message::Encryption::Aes(random_32_bytes()),
@@ -164,7 +164,7 @@ pub fn new_proxy_tcp_close_request(
     let payload = ProxyTcpPayload::CloseRequest;
     let payload = payload.try_into()?;
     Ok(WrapperMessage {
-        tunnel_id,
+        tunnel_id: Some(tunnel_id),
         message_id: Uuid::new_v4().to_string(),
         user_token,
         encryption: message::Encryption::Aes(random_32_bytes()),
@@ -187,7 +187,7 @@ pub fn new_proxy_udp_data(
     };
     let payload = payload.try_into()?;
     Ok(WrapperMessage {
-        tunnel_id,
+        tunnel_id: Some(tunnel_id),
         message_id: Uuid::new_v4().to_string(),
         user_token,
         encryption: message::Encryption::Aes(random_32_bytes()),
@@ -209,7 +209,7 @@ pub fn unwrap_agent_tcp_message(
         ..
     } = message;
     if payload_type != PayloadType::Tcp {
-        return Err(ProtocolError::Other(format!("Fail to parse wrapper message [{message_id}] for user [{user_token}] in tunnel [{tunnel_id}] to agent tcp payload because of the payload type is not TCP: {payload_type:?}")));
+        return Err(ProtocolError::Other(format!("Fail to parse wrapper message [{message_id}] for user [{user_token}] in tunnel [{tunnel_id:?}] to agent tcp payload because of the payload type is not TCP: {payload_type:?}")));
     }
     let agent_tcp_payload: AgentTcpPayload = payload.try_into()?;
     Ok(UnwrappedAgentTcpMessage {
@@ -235,7 +235,7 @@ pub fn unwrap_agent_udp_message(
         ..
     } = message;
     if payload_type != PayloadType::Udp {
-        return Err(ProtocolError::Other(format!("Fail to parse wrapper message [{message_id}] for user [{user_token}] in tunnel [{tunnel_id}] to agent udp payload because of the payload type is not UDP: {payload_type:?}")));
+        return Err(ProtocolError::Other(format!("Fail to parse wrapper message [{message_id}] for user [{user_token}] in tunnel [{tunnel_id:?}] to agent udp payload because of the payload type is not UDP: {payload_type:?}")));
     }
     let agent_udp_payload: AgentUdpPayload = payload.try_into()?;
     Ok(UnwrappedAgentUdpMessage {
@@ -261,7 +261,7 @@ pub fn unwrap_proxy_tcp_message(
         ..
     } = message;
     if payload_type != PayloadType::Tcp {
-        return Err(ProtocolError::Other(format!("Fail to parse wrapper message [{message_id}] for user [{user_token}] in tunnel [{tunnel_id}] to proxy tcp payload because of the payload type is not TCP: {payload_type:?}")));
+        return Err(ProtocolError::Other(format!("Fail to parse wrapper message [{message_id}] for user [{user_token}] in tunnel [{tunnel_id:?}] to proxy tcp payload because of the payload type is not TCP: {payload_type:?}")));
     }
     let proxy_tcp_payload: ProxyTcpPayload = payload.try_into()?;
     Ok(UnwrappedProxyTcpMessage {
@@ -287,7 +287,7 @@ pub fn unwrap_proxy_udp_payload(
         ..
     } = message;
     if payload_type != PayloadType::Udp {
-        return Err(ProtocolError::Other(format!("Fail to parse wrapper message [{message_id}] for user [{user_token}] in tunnel [{tunnel_id}] to proxy udp payload because of the payload type is not UDP: {payload_type:?}")));
+        return Err(ProtocolError::Other(format!("Fail to parse wrapper message [{message_id}] for user [{user_token}] in tunnel [{tunnel_id:?}] to proxy udp payload because of the payload type is not UDP: {payload_type:?}")));
     }
     let proxy_udp_payload: ProxyUdpPayload = payload.try_into()?;
     Ok(UnwrappedProxyUdpMessage {
