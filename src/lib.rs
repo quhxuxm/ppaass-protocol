@@ -3,7 +3,7 @@ pub mod message;
 pub mod values;
 
 #[macro_export]
-macro_rules! make_as_protocol_message {
+macro_rules! make_as_bytes {
     (
         $(#[$meta:meta])*
         $struct_vis: vis struct $struct_name: ident {
