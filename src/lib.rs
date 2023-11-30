@@ -10,7 +10,7 @@ macro_rules! make_as_protocol_message {
             $(
                  $(#[$field_meta:meta])*
                 $field_vis: vis $field_name: ident : $field_type: ty
-            ),* $(,)+
+            ),* $(,)*
         }
     ) => {
         $(#[$meta])*

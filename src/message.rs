@@ -50,6 +50,8 @@ make_as_protocol_message! {
         dst_address: NetAddress,
         /// The tunnel initialized on proxy side
         tunnel: Tunnel,
+        /// The relay data
+        data: Bytes
     }
 }
 
