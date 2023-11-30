@@ -14,6 +14,8 @@ make_as_bytes! {
         message_id: String,
         /// The secure information
         secure_info: SecureInfo,
+        /// The tunnel
+        tunnel: Tunnel,
         /// The payload of the wrapper message
         payload: Bytes
     }
@@ -36,8 +38,6 @@ make_as_bytes! {
         src_address: NetAddress,
         /// The destination address
         dst_address: NetAddress,
-        /// The tunnel initialized on proxy side
-        tunnel: Tunnel,
     }
 }
 
@@ -48,8 +48,6 @@ make_as_bytes! {
         src_address: NetAddress,
         /// The destination address
         dst_address: NetAddress,
-        /// The tunnel initialized on proxy side
-        tunnel: Tunnel,
         /// The relay data
         data: Bytes
     }
@@ -62,7 +60,5 @@ make_as_bytes! {
         src_address: NetAddress,
         /// The destination address
         dst_address: NetAddress,
-        /// The tunnel initialized on proxy side
-        tunnel: Tunnel,
     }
 }
