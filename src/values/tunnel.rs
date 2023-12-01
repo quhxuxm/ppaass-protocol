@@ -1,7 +1,7 @@
 use derive_more::{Constructor, Display};
 use serde_derive::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug, Constructor, Eq, PartialEq, Hash, Display)]
+#[derive(Serialize, Deserialize, Debug, Constructor, Eq, PartialEq, Hash, Display, Clone)]
 #[display(fmt = "{}://[{}]<=>[{:?}]", tunnel_type, agent_edge_id, proxy_edge_id)]
 pub struct Tunnel {
     pub agent_edge_id: String,
@@ -9,7 +9,7 @@ pub struct Tunnel {
     pub tunnel_type: TunnelType,
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Hash, Display)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq, Hash, Display, Clone, Copy)]
 pub enum TunnelType {
     #[display(fmt = "tcp")]
     Tcp,
