@@ -1,2 +1,2 @@
-mod agent;
-mod proxy;
+pub mod agent;
+pub mod proxy;
