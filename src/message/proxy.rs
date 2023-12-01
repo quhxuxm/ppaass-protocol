@@ -7,9 +7,16 @@ use bytes::Bytes;
 use derive_more::Constructor;
 use serde_derive::{Deserialize, Serialize};
 
+#[derive(Serialize, Deserialize, Debug)]
+pub enum ProxyMessagePayload {
+    InitTunnelResult(Bytes),
+    RelayData(Bytes),
+    CloseTunnelCommand(Bytes),
+}
+
 make_as_bytes! {
     #[derive(Serialize, Deserialize, Debug, Constructor)]
-    struct WrapperMessage {
+    struct ProxyMessage {
         /// The request id
         message_id: String,
         /// The secure information
@@ -17,17 +24,7 @@ make_as_bytes! {
         /// The tunnel
         tunnel: Tunnel,
         /// The payload of the wrapper message
-        payload: Bytes
-    }
-}
-
-make_as_bytes! {
-    #[derive(Serialize, Deserialize, Debug, Constructor)]
-    struct InitTunnelCommand {
-        /// The source address of this request
-        src_address: NetAddress,
-        /// The destination address of this request
-        dst_address: NetAddress,
+        payload: ProxyMessagePayload
     }
 }
 
@@ -43,7 +40,7 @@ make_as_bytes! {
 
 make_as_bytes! {
     #[derive(Serialize, Deserialize, Debug, Constructor)]
-    struct RelayDataCommand {
+    struct RelayData {
         /// The source address
         src_address: NetAddress,
         /// The destination address

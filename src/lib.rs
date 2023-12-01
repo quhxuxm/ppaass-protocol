@@ -8,7 +8,7 @@ macro_rules! make_as_bytes {
         $(#[$meta:meta])*
         $struct_vis: vis struct $struct_name: ident {
             $(
-                 $(#[$field_meta:meta])*
+                $(#[$field_meta:meta])*
                 $field_vis: vis $field_name: ident : $field_type: ty
             ),* $(,)*
         }
