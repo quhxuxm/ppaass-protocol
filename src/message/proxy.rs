@@ -7,12 +7,14 @@ use bytes::Bytes;
 use derive_more::Constructor;
 use serde_derive::{Deserialize, Serialize};
 
+#[derive(Debug)]
 pub enum ProxyMessagePayload {
     InitTunnelResult(InitTunnelResult),
     RelayData(RelayData),
     CloseTunnelCommand(CloseTunnelCommand),
 }
 
+#[derive(Debug)]
 pub struct ProxyMessage {
     /// The request id
     pub message_id: String,

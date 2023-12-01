@@ -7,12 +7,14 @@ use bytes::Bytes;
 use derive_more::Constructor;
 use serde_derive::{Deserialize, Serialize};
 
+#[derive(Debug)]
 pub enum AgentMessagePayload {
     InitTunnelCommand(InitTunnelCommand),
     RelayData(RelayData),
     CloseTunnelCommand(CloseTunnelCommand),
 }
 
+#[derive(Debug)]
 pub struct AgentMessage {
     /// The request id
     pub message_id: String,
