@@ -25,7 +25,7 @@ macro_rules! make_as_bytes {
             type Error = ProtocolError;
 
             fn try_from(value: Bytes) -> Result<Self, Self::Error> {
-                bincode::deserialize(&value).map_err(ProtocolError::Deserialize)
+                bincode::deserialize(&value).map_err(|e|ProtocolError(format!("Fail to deserialize bytes to object because of error: {e:?}")))
             }
         }
 
@@ -35,7 +35,7 @@ macro_rules! make_as_bytes {
             fn try_from(value: $struct_name) -> Result<Self, Self::Error> {
                 bincode::serialize(&value)
                     .map(Bytes::from)
-                    .map_err(ProtocolError::Serialize)
+                    .map_err(|e|ProtocolError(format!("Fail to serialize object to bytes because of error: {e:?}")))
             }
         }
     };
