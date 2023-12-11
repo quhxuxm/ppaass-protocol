@@ -2,7 +2,7 @@ use crate::error::ProtocolError;
 use crate::make_as_bytes;
 use crate::values::address::NetAddress;
 use crate::values::security::SecureInfo;
-use crate::values::tunnel::Tunnel;
+use crate::values::tunnel::TunnelInfo;
 use bytes::Bytes;
 use derive_more::Constructor;
 use serde_derive::{Deserialize, Serialize};
@@ -21,7 +21,7 @@ pub struct ProxyMessage {
     /// The secure information
     pub secure_info: SecureInfo,
     /// The tunnel
-    pub tunnel: Tunnel,
+    pub tunnel: TunnelInfo,
     /// The payload of the wrapper message
     pub payload: ProxyMessagePayload,
 }
@@ -41,7 +41,7 @@ make_as_bytes! {
         /// The secure information
         secure_info: SecureInfo,
         /// The tunnel
-        tunnel: Tunnel,
+        tunnel: TunnelInfo,
         /// The payload of the wrapper message
         payload: EncodedProxyMessagePayload
     }

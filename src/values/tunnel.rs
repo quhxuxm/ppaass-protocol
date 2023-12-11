@@ -3,7 +3,7 @@ use serde_derive::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Constructor, Eq, PartialEq, Hash, Display, Clone)]
 #[display(fmt = "{}://[{}]<=>[{:?}]", tunnel_type, agent_edge_id, proxy_edge_id)]
-pub struct Tunnel {
+pub struct TunnelInfo {
     pub agent_edge_id: String,
     pub proxy_edge_id: Option<String>,
     pub tunnel_type: TunnelType,
