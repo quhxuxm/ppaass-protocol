@@ -6,7 +6,7 @@ use std::net::SocketAddr;
 /// The net address for ppaass protocol which will transfer between
 /// agent and proxy
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, Display)]
-pub enum NetAddress {
+pub enum UnifiedNetAddress {
     /// The ip address, including support for v4 and v6
     #[display(fmt = "{:?}", _0)]
     Ip(SocketAddr),
@@ -15,18 +15,18 @@ pub enum NetAddress {
     Domain { host: String, port: u16 },
 }
 
-impl PartialEq for NetAddress {
+impl PartialEq for UnifiedNetAddress {
     fn eq(&self, other: &Self) -> bool {
         match (self, other) {
-            (NetAddress::Ip(self_socket_addr), NetAddress::Ip(other_socket_addr)) => {
+            (UnifiedNetAddress::Ip(self_socket_addr), UnifiedNetAddress::Ip(other_socket_addr)) => {
                 self_socket_addr.eq(other_socket_addr)
             }
             (
-                NetAddress::Domain {
+                UnifiedNetAddress::Domain {
                     host: self_host,
                     port: self_port,
                 },
-                NetAddress::Domain {
+                UnifiedNetAddress::Domain {
                     host: other_host,
                     port: other_port,
                 },
@@ -36,8 +36,8 @@ impl PartialEq for NetAddress {
     }
 }
 
-impl From<SocketAddr> for NetAddress {
+impl From<SocketAddr> for UnifiedNetAddress {
     fn from(value: SocketAddr) -> Self {
-        NetAddress::Ip(value)
+        UnifiedNetAddress::Ip(value)
     }
 }

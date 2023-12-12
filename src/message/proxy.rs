@@ -1,6 +1,6 @@
 use crate::error::ProtocolError;
 use crate::make_as_bytes;
-use crate::values::address::NetAddress;
+use crate::values::address::UnifiedNetAddress;
 use crate::values::security::SecureInfo;
 use crate::values::tunnel::TunnelInfo;
 use bytes::Bytes;
@@ -51,9 +51,9 @@ make_as_bytes! {
     #[derive(Serialize, Deserialize, Debug, Constructor)]
     struct InitTunnelResult {
         /// The source address
-        src_address: NetAddress,
+        src_address: UnifiedNetAddress,
         /// The destination address
-        dst_address: NetAddress,
+        dst_address: UnifiedNetAddress,
     }
 }
 
@@ -61,9 +61,9 @@ make_as_bytes! {
     #[derive(Serialize, Deserialize, Debug, Constructor)]
     struct RelayData {
         /// The source address
-        src_address: NetAddress,
+        src_address: UnifiedNetAddress,
         /// The destination address
-        dst_address: NetAddress,
+        dst_address: UnifiedNetAddress,
         /// The relay data
         data: Bytes
     }
@@ -73,8 +73,8 @@ make_as_bytes! {
     #[derive(Serialize, Deserialize, Debug, Constructor)]
     struct CloseTunnelCommand {
         /// The source address
-        src_address: NetAddress,
+        src_address: UnifiedNetAddress,
         /// The destination address
-        dst_address: NetAddress,
+        dst_address: UnifiedNetAddress,
     }
 }
