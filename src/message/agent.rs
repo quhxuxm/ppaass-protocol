@@ -8,7 +8,7 @@ use serde_derive::{Deserialize, Serialize};
 
 #[derive(Debug)]
 pub enum AgentMessagePayload {
-    InitTunnelCommand(InitTunneCommand),
+    InitTunnelCommand(InitTunnelCommand),
     RelayData(RelayData),
     CloseTunnelCommand(CloseTunnelCommand),
 }
@@ -43,7 +43,7 @@ make_as_bytes! {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub enum InitTunneCommand {
+pub enum InitTunnelCommand {
     Tcp {
         /// The source address of this request
         src_address: UnifiedNetAddress,
