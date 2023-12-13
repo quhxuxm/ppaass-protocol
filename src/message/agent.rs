@@ -42,22 +42,24 @@ make_as_bytes! {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
-pub enum InitTunnelCommand {
-    Tcp {
-        /// The source address of this request
-        src_address: UnifiedNetAddress,
-        /// The destination address of this request
-        dst_address: UnifiedNetAddress,
-        /// The agent edge id
-        agent_edge_id: String,
-    },
-    Udp {
-        /// The source address of this request
-        src_address: UnifiedNetAddress,
-        /// The agent edge id
-        agent_edge_id: String,
-    },
+make_as_bytes! {
+    #[derive(Serialize, Deserialize, Debug)]
+    enum InitTunnelCommand {
+        Tcp {
+            /// The source address of this request
+            src_address: UnifiedNetAddress,
+            /// The destination address of this request
+            dst_address: UnifiedNetAddress,
+            /// The agent edge id
+            agent_edge_id: String,
+        },
+        Udp {
+            /// The source address of this request
+            src_address: UnifiedNetAddress,
+            /// The agent edge id
+            agent_edge_id: String,
+        },
+    }
 }
 
 make_as_bytes! {
