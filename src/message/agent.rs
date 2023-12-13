@@ -2,14 +2,13 @@ use crate::error::ProtocolError;
 use crate::make_as_bytes;
 use crate::values::address::UnifiedNetAddress;
 use crate::values::security::SecureInfo;
-use crate::values::tunnel::TunnelInfo;
 use bytes::Bytes;
 use derive_more::Constructor;
 use serde_derive::{Deserialize, Serialize};
 
 #[derive(Debug)]
 pub enum AgentMessagePayload {
-    InitTunnelCommand(InitTunnelCommand),
+    InitTunnelCommand(InitTunneCommand),
     RelayData(RelayData),
     CloseTunnelCommand(CloseTunnelCommand),
 }
@@ -20,8 +19,6 @@ pub struct AgentMessage {
     pub message_id: String,
     /// The secure information
     pub secure_info: SecureInfo,
-    /// The tunnel
-    pub tunnel: TunnelInfo,
     /// The payload of the wrapper message
     pub payload: AgentMessagePayload,
 }
@@ -40,26 +37,36 @@ make_as_bytes! {
         message_id: String,
         /// The secure information
         secure_info: SecureInfo,
-        /// The tunnel
-        tunnel: TunnelInfo,
         /// The payload of the wrapper message
         payload: EncodedAgentMessagePayload
     }
 }
 
-make_as_bytes! {
-    #[derive(Serialize, Deserialize, Debug, Constructor)]
-    struct InitTunnelCommand {
+#[derive(Serialize, Deserialize, Debug)]
+pub enum InitTunneCommand {
+    Tcp {
         /// The source address of this request
         src_address: UnifiedNetAddress,
         /// The destination address of this request
         dst_address: UnifiedNetAddress,
-    }
+        /// The agent edge id
+        agent_edge_id: String,
+    },
+    Udp {
+        /// The source address of this request
+        src_address: UnifiedNetAddress,
+        /// The agent edge id
+        agent_edge_id: String,
+    },
 }
 
 make_as_bytes! {
     #[derive(Serialize, Deserialize, Debug, Constructor)]
     struct RelayData {
+        /// The agent edge id
+        agent_edge_id: String,
+        /// The agent edge id
+        proxy_edge_id: String,
         /// The source address
         src_address: UnifiedNetAddress,
         /// The destination address
@@ -72,6 +79,10 @@ make_as_bytes! {
 make_as_bytes! {
     #[derive(Serialize, Deserialize, Debug, Constructor)]
     struct CloseTunnelCommand {
+        /// The agent edge id
+        agent_edge_id: String,
+        /// The agent edge id
+        proxy_edge_id: String,
         /// The source address
         src_address: UnifiedNetAddress,
         /// The destination address
