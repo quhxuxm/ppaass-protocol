@@ -82,6 +82,6 @@ make_as_bytes! {
         /// The source address
         src_address: UnifiedNetAddress,
         /// The destination address
-        dst_address: UnifiedNetAddress,
+        dst_address: Option<UnifiedNetAddress>,
     }
 }
