@@ -48,7 +48,7 @@ make_as_bytes! {
         /// The source address
         src_address: UnifiedNetAddress,
         /// The destination address
-        dst_address: UnifiedNetAddress,
+        dst_address: Option<UnifiedNetAddress>,
         /// The agent edge id
         agent_edge_id: String,
         /// The agent edge id
