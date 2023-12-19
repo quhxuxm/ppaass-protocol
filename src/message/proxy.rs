@@ -83,15 +83,25 @@ make_as_bytes! {
 }
 
 make_as_bytes! {
-    #[derive(Serialize, Deserialize, Debug, Constructor)]
-    struct CloseTunnelCommand {
-        /// The agent edge id
-        agent_edge_id: String,
-        /// The agent edge id
-        proxy_edge_id: String,
-        /// The source address
-        src_address: UnifiedNetAddress,
-        /// The destination address
-        dst_address: Option<UnifiedNetAddress>,
+    #[derive(Serialize, Deserialize, Debug)]
+    enum CloseTunnelCommand {
+        Tcp{
+            /// The agent edge id
+            agent_edge_id: String,
+            /// The agent edge id
+            proxy_edge_id: String,
+            /// The source address
+            src_address: UnifiedNetAddress,
+            /// The destination address
+            dst_address: UnifiedNetAddress,
+        },
+        Udp{
+            /// The agent edge id
+            agent_edge_id: String,
+            /// The agent edge id
+            proxy_edge_id: String,
+            /// The source address
+            src_address: UnifiedNetAddress,
+        }
     }
 }
