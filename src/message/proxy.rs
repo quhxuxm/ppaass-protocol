@@ -43,16 +43,26 @@ make_as_bytes! {
 }
 
 make_as_bytes! {
-    #[derive(Serialize, Deserialize, Debug, Constructor)]
-    struct InitTunnelResult {
-        /// The source address
-        src_address: UnifiedNetAddress,
-        /// The destination address
-        dst_address: Option<UnifiedNetAddress>,
-        /// The agent edge id
-        agent_edge_id: String,
-        /// The agent edge id
-        proxy_edge_id: String,
+    #[derive(Serialize, Deserialize, Debug)]
+    enum InitTunnelResult {
+        Tcp{
+            /// The source address
+            src_address: UnifiedNetAddress,
+            /// The destination address
+            dst_address: UnifiedNetAddress,
+            /// The agent edge id
+            agent_edge_id: String,
+            /// The agent edge id
+            proxy_edge_id: String,
+        },
+        Udp{
+            /// The source address
+            src_address: UnifiedNetAddress,
+            /// The agent edge id
+            agent_edge_id: String,
+            /// The agent edge id
+            proxy_edge_id: String,
+        }
     }
 }
 
