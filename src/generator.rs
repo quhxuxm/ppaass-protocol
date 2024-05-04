@@ -93,13 +93,11 @@ impl PpaassMessageGenerator {
         src_address: PpaassUnifiedAddress,
         dst_address: PpaassUnifiedAddress,
         data: Bytes,
-        need_response: bool,
     ) -> Result<PpaassAgentMessage, ProtocolError> {
-        let payload = PpaassAgentMessagePayload::Udp(AgentUdpPayload {
+        let payload = PpaassAgentMessagePayload::Udp(AgentUdpPayload::Data {
             src_address,
             dst_address,
             data,
-            need_response,
         });
         let message = PpaassAgentMessage::new(
             Uuid::new_v4().to_string(),
