@@ -94,7 +94,7 @@ impl PpaassMessageGenerator {
         dst_address: PpaassUnifiedAddress,
         data: Bytes,
     ) -> Result<PpaassAgentMessage, ProtocolError> {
-        let payload = PpaassAgentMessagePayload::Udp(AgentUdpPayload::Data {
+        let payload = PpaassAgentMessagePayload::Udp(AgentUdpPayload {
             src_address,
             dst_address,
             data,
