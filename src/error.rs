@@ -2,8 +2,10 @@ use thiserror::Error;
 #[derive(Error, Debug)]
 
 pub enum ProtocolError {
-    #[error("Protocol error happen because of standard io: {_0:?}")]
-    StdIo(#[from] std::io::Error),
-    #[error("Protocol error happen because of reason: {_0}")]
-    Other(String),
+    #[error("IO error: {_0:?}")]
+    Io(#[from] std::io::Error),
+    #[error("Bincode error: {_0:?}")]
+    Bincode(#[from] bincode::Error),
+    #[error("Unknown error: {_0}")]
+    Unknown(String),
 }

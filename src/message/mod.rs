@@ -1,60 +1,77 @@
-pub mod payload;
 pub mod values;
-
-use crate::make_as_bytes;
-use crate::message::payload::tcp::{AgentTcpPayload, ProxyTcpPayload};
-use crate::message::payload::udp::{AgentUdpPayload, ProxyUdpPayload};
-
+use crate::error::ProtocolError;
+use crate::message::values::address::UnifiedAddress;
 use bytes::Bytes;
 use derive_more::Constructor;
-
-use crate::error::ProtocolError;
-use crate::message::values::encryption::PpaassMessagePayloadEncryption;
 use serde_derive::{Deserialize, Serialize};
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub enum Encryption {
+    Plain,
+    Aes(Bytes),
+}
 
-make_as_bytes! {
-    #[derive(Serialize, Deserialize, Debug, Constructor)]
-    struct CodecPpaassMessage {
-        message_id: String,
-        user_token: String,
-        encryption: PpaassMessagePayloadEncryption,
-        payload: Bytes,
+impl TryFrom<Bytes> for Encryption {
+    type Error = ProtocolError;
+    fn try_from(value: Bytes) -> Result<Self, Self::Error> {
+        let result = bincode::deserialize::<Encryption>(&value)?;
+        Ok(result)
     }
 }
 
-make_as_bytes! {
-    #[derive(Serialize, Deserialize, Debug)]
-    pub enum PpaassAgentMessagePayload {
-        Tcp(AgentTcpPayload),
-        Udp(AgentUdpPayload),
+impl TryFrom<Encryption> for Bytes {
+    type Error = ProtocolError;
+    fn try_from(value: Encryption) -> Result<Self, Self::Error> {
+        let result = bincode::serialize(&value)?;
+        Ok(result.into())
     }
 }
 
-make_as_bytes! {
-    #[derive(Serialize, Deserialize, Debug, Constructor)]
-    pub struct PpaassAgentMessage {
-        pub message_id: String,
-        pub user_token: String,
-        pub encryption: PpaassMessagePayloadEncryption,
-        pub payload: PpaassAgentMessagePayload,
+#[derive(Serialize, Deserialize, Debug)]
+pub enum Payload {
+    KeyExchange,
+    Content {
+        src_address: UnifiedAddress,
+        dest_address: UnifiedAddress,
+        data: Option<Bytes>,
+    },
+}
+
+impl TryFrom<Bytes> for Payload {
+    type Error = ProtocolError;
+    fn try_from(value: Bytes) -> Result<Self, Self::Error> {
+        let result = bincode::deserialize::<Payload>(&value)?;
+        Ok(result)
     }
 }
 
-make_as_bytes! {
-    #[derive(Serialize, Deserialize, Debug)]
-    pub enum PpaassProxyMessagePayload {
-        Tcp(ProxyTcpPayload),
-        Udp(ProxyUdpPayload),
+impl TryFrom<Payload> for Bytes {
+    type Error = ProtocolError;
+    fn try_from(value: Payload) -> Result<Self, Self::Error> {
+        let result = bincode::serialize(&value)?;
+        Ok(result.into())
     }
 }
 
-make_as_bytes! {
-    #[non_exhaustive]
-    #[derive(Serialize, Deserialize, Debug, Constructor)]
-    pub struct PpaassProxyMessage {
-        pub message_id: String,
-        pub user_token: String,
-        pub encryption: PpaassMessagePayloadEncryption,
-        pub payload: PpaassProxyMessagePayload,
+#[derive(Serialize, Deserialize, Debug, Constructor)]
+pub struct Packet {
+    packet_id: String,
+    user_token: String,
+    encryption: Encryption,
+    payload: Payload,
+}
+
+impl TryFrom<Bytes> for Packet {
+    type Error = ProtocolError;
+    fn try_from(value: Bytes) -> Result<Self, Self::Error> {
+        let result = bincode::deserialize::<Packet>(&value)?;
+        Ok(result)
+    }
+}
+
+impl TryFrom<Packet> for Bytes {
+    type Error = ProtocolError;
+    fn try_from(value: Packet) -> Result<Self, Self::Error> {
+        let result = bincode::serialize(&value)?;
+        Ok(result.into())
     }
 }

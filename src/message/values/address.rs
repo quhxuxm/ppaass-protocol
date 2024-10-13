@@ -1,45 +1,29 @@
-
+use crate::error::ProtocolError;
 use derive_more::Display;
 use serde_derive::{Deserialize, Serialize};
-
-use log::trace;
 use std::net::SocketAddr;
 use std::net::ToSocketAddrs;
-use crate::error::ProtocolError;
-
 #[derive(Serialize, Deserialize, Debug, Clone, Eq, Display)]
-pub enum PpaassUnifiedAddress {
-    #[display(fmt = "{_0:?}")]
+pub enum UnifiedAddress {
+    #[display("{_0:?}")]
     Ip(SocketAddr),
-    #[display(fmt = "{}:{}", host, port)]
+    #[display("{}:{}", host, port)]
     Domain { host: String, port: u16 },
 }
 
-impl PartialEq for PpaassUnifiedAddress {
+impl PartialEq for UnifiedAddress {
     fn eq(&self, other: &Self) -> bool {
         match self {
-            PpaassUnifiedAddress::Ip(self_ip_addr) => match other {
-                PpaassUnifiedAddress::Ip(other_ip_addr) => self_ip_addr.eq(other_ip_addr),
-                PpaassUnifiedAddress::Domain {
-                    host: other_host,
-                    port: other_port,
-                } => {
-                    trace!("Fail to compare ip address and domain address, ip address=[{self_ip_addr}], domain address=[{other_host}:{other_port}]");
-                    false
-                },
+            UnifiedAddress::Ip(ip_addr) => match other {
+                UnifiedAddress::Ip(other_ip_addr) => ip_addr.eq(other_ip_addr),
+                UnifiedAddress::Domain { .. } => false,
             },
-            PpaassUnifiedAddress::Domain {
-                host: self_host,
-                port: self_port,
-            } => match other {
-                PpaassUnifiedAddress::Ip(other_ip_addr) => {
-                    trace!("Fail to compare domain address and ip address, domain address=[{self_host}:{self_port}], ip address=[{other_ip_addr}], ");
-                    false
-                },
-                PpaassUnifiedAddress::Domain {
+            UnifiedAddress::Domain { host, port } => match other {
+                UnifiedAddress::Ip(_) => false,
+                UnifiedAddress::Domain {
                     host: other_host,
                     port: other_port,
-                } => self_host == other_host && self_port == other_port,
+                } => host == other_host && port == other_port,
             },
         }
     }
@@ -66,33 +50,36 @@ impl Iterator for SocketAddrIter {
     }
 }
 
-impl ToSocketAddrs for PpaassUnifiedAddress {
+impl ToSocketAddrs for UnifiedAddress {
     type Iter = SocketAddrIter;
 
     fn to_socket_addrs(&self) -> std::io::Result<Self::Iter> {
-        let socket_addr_vec: Vec<SocketAddr> = self.clone().try_into().map_err(|e| std::io::Error::new(std::io::ErrorKind::InvalidData, e))?;
+        let socket_addr_vec: Vec<SocketAddr> = self
+            .clone()
+            .try_into()
+            .map_err(|e| std::io::Error::new(std::io::ErrorKind::InvalidData, e))?;
         Ok(SocketAddrIter::new(socket_addr_vec))
     }
 }
 
-impl TryFrom<PpaassUnifiedAddress> for Vec<SocketAddr> {
+impl TryFrom<UnifiedAddress> for Vec<SocketAddr> {
     type Error = ProtocolError;
 
-    fn try_from(value: PpaassUnifiedAddress) -> Result<Self, Self::Error> {
+    fn try_from(value: UnifiedAddress) -> Result<Self, Self::Error> {
         match value {
-            PpaassUnifiedAddress::Ip(socket_addr) => Ok(vec![socket_addr]),
-            PpaassUnifiedAddress::Domain { host, port } => {
+            UnifiedAddress::Ip(socket_addr) => Ok(vec![socket_addr]),
+            UnifiedAddress::Domain { host, port } => {
                 let address_string = format!("{host}:{port}");
                 let addresses = address_string.to_socket_addrs()?;
                 let addresses = addresses.collect::<Vec<_>>();
                 Ok(addresses)
-            },
+            }
         }
     }
 }
 
-impl From<SocketAddr> for PpaassUnifiedAddress {
+impl From<SocketAddr> for UnifiedAddress {
     fn from(value: SocketAddr) -> Self {
-        PpaassUnifiedAddress::Ip(value)
+        UnifiedAddress::Ip(value)
     }
 }
