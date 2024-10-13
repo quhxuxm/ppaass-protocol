@@ -57,7 +57,7 @@ pub struct Packet {
     packet_id: String,
     user_token: String,
     encryption: Encryption,
-    payload: Payload,
+    payload: Bytes,
 }
 
 impl TryFrom<Bytes> for Packet {
