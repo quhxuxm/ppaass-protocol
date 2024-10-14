@@ -59,6 +59,23 @@ pub struct Packet {
     encryption: Encryption,
     payload: Bytes,
 }
+impl Packet {
+    pub fn packet_id(&self) -> &str {
+        &self.packet_id
+    }
+
+    pub fn user_token(&self) -> &str {
+        &self.user_token
+    }
+
+    pub fn encryption(&self) -> &Encryption {
+        &self.encryption
+    }
+
+    pub fn payload(&self) -> &[u8] {
+        &self.payload
+    }
+}
 
 impl TryFrom<Bytes> for Packet {
     type Error = ProtocolError;
