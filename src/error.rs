@@ -6,6 +6,4 @@ pub enum ProtocolError {
     Io(#[from] std::io::Error),
     #[error("Bincode error: {_0:?}")]
     Bincode(#[from] bincode::Error),
-    #[error("Unknown error: {_0}")]
-    Unknown(String),
 }
